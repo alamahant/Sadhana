@@ -1,0 +1,68 @@
+    m_viewPdfButton->setCheckable(true);
+    m_viewPdfButton->setChecked(false);
+    m_assignPdfButton->setFixedHeight(32);
+    m_viewPdfButton->setFixedHeight(32);
+    m_assignPdfButton->setMinimumWidth(90);
+    m_viewPdfButton->setMinimumWidth(90);
+
+    QString pdfButtonStyle = "QPushButton { background-color: #3a3a3a; border-radius: 4px; } QPushButton:hover { background-color: #4a4a4a; }";
+    m_assignPdfButton->setStyleSheet(pdfButtonStyle);
+    m_viewPdfButton->setStyleSheet(pdfButtonStyle);
+
+    m_viewPdfButton->setEnabled(true);
+
+    m_viewPdfButton->setToolTip("PDF Viewer Shortcuts:\n"
+                                "Ctrl + +   Zoom in\n"
+                                "Ctrl + -   Zoom out\n"
+                                "Ctrl + 0   100%\n"
+                                "Ctrl + 9   Fit to width\n"
+                                "Ctrl + 8   Fit page");
+--
+        m_viewPdfButton->setChecked(false);
+        return;
+    }
+
+    if (checked) {
+        // Show PDF
+--
+        m_viewPdfButton->setText("View Text");
+    } else {
+        // Show text
+        m_textArea->setVisible(true);
+        m_pdfView->setVisible(false);
+        m_viewPdfButton->setText("View PDF");
+    }
+}
+
+void PujaView::saveModuleData()
+{
+--
+    m_viewPdfButton->setEnabled(enabled);
+    // Custom module specific widgets (visible only for custom modules)
+    if (m_addStageButton) m_addStageButton->setVisible(enabled);
+    if (m_liturgyEdit) m_liturgyEdit->setVisible(enabled);
+    if (m_mantraEdit) m_mantraEdit->setVisible(enabled);
+    if (loadTextButton) loadTextButton->setVisible(enabled);
+--
+    m_viewPdfButton->setChecked(false);
+    m_viewPdfButton->setText("View PDF");
+
+    // Load PDF or Text
+    if (stage.usePdf && !stage.pdfPath.isEmpty()) {
+        // Clean up old PDF document properly
+        if (m_pdfView->document()) {
+--
+        m_viewPdfButton->setChecked(true);
+        m_viewPdfButton->setText("View Text");
+
+    } else {
+        // No PDF - clean up and show text
+        if (m_pdfView->document()) {
+            QPdfDocument* oldDoc = m_pdfView->document();
+--
+            m_viewPdfButton->setEnabled(true);
+        }
+    }
+}
+
+

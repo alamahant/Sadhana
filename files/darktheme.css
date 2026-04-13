@@ -1,0 +1,195 @@
+/* Main Window */
+QMainWindow {
+    background-color: #1a1a1a;
+}
+
+/* Menu Bar */
+QMenuBar {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+QMenuBar::item:selected {
+    background-color: #3a3a3a;
+}
+QMenu {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #3a3a3a;
+}
+QMenu::item:selected {
+    background-color: #3a3a3a;
+}
+
+/* Message Box */
+QMessageBox {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+QMessageBox QLabel {
+    color: #ffffff;
+}
+QMessageBox QPushButton {
+    background-color: #3a6ea5;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    min-width: 70px;
+}
+QMessageBox QPushButton:hover {
+    background-color: #4a7eb5;
+}
+
+/* Dialogs */
+QDialog {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+QDialog QLabel {
+    color: #ffffff;
+}
+QDialog QLineEdit {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 5px;
+    border-radius: 4px;
+}
+QDialog QPushButton {
+    background-color: #3a6ea5;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    min-width: 80px;
+}
+QDialog QPushButton:hover {
+    background-color: #4a7eb5;
+}
+
+/* File Dialog */
+QFileDialog {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+QFileDialog QLabel {
+    color: #ffffff;
+}
+QFileDialog QListView {
+    background-color: #333;
+    color: #ffffff;
+}
+QFileDialog QTreeView {
+    background-color: #333;
+    color: #ffffff;
+}
+
+/* Input Dialog */
+QInputDialog {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+QInputDialog QLabel {
+    color: #ffffff;
+}
+QInputDialog QLineEdit {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+/* Progress Dialog */
+QProgressDialog {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+QProgressDialog QLabel {
+    color: #ffffff;
+}
+
+/* Error Message */
+QErrorMessage {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+QErrorMessage QLabel {
+    color: #ffffff;
+}
+
+/* Push Buttons */
+QPushButton {
+    background-color: #3a6ea5;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+QPushButton:hover {
+    background-color: #4a7eb5;
+}
+QPushButton:pressed {
+    background-color: #2a5e95;
+}
+QPushButton:disabled {
+    background-color: #555;
+    color: #888;
+}
+
+/* Text Edit / Browser */
+QTextEdit {
+    background-color: #111;
+    color: #ccc;
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+QTextBrowser {
+    background-color: #111;
+    color: #ccc;
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+
+/* Scroll Area */
+QScrollArea {
+    background-color: #1a1a1a;
+    border: none;
+}
+
+/* Scroll Bars */
+QScrollBar:vertical {
+    background-color: #2a2a2a;
+    width: 12px;
+    border-radius: 6px;
+}
+QScrollBar::handle:vertical {
+    background-color: #555;
+    border-radius: 6px;
+    min-height: 20px;
+}
+QScrollBar::handle:vertical:hover {
+    background-color: #777;
+}
+QScrollBar:horizontal {
+    background-color: #2a2a2a;
+    height: 12px;
+    border-radius: 6px;
+}
+QScrollBar::handle:horizontal {
+    background-color: #555;
+    border-radius: 6px;
+    min-width: 20px;
+}
+QScrollBar::handle:horizontal:hover {
+    background-color: #777;
+}
+
+/* Tool Tips */
+QToolTip {
+    background-color: #333;
+    color: #ffd700;
+    border: 1px solid #555;
+    padding: 5px;
+    border-radius: 4px;
+}

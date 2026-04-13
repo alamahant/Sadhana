@@ -1,0 +1,39 @@
+{
+    "id": "chenrezig",
+    "name": "Chenrezig",
+    "mantraText": "Om Mani Padme Hum",
+    "openingText": "འཇིགས་རུང་འཁོར་མཚོར་བྱིང་བའི་འགྲོ་བ་ལ།\nJik rung khor tshor jing wé dro wa la\nTo beings drowning in saṃsāra's terrifying ocean\n\nདམིགས་མེད་སྙིང་རྗེའི་དབང་གྱུར་སྤྲུལ་པའི་གར།\nMik mé nying jé wang gyur trul pé gar\nYou manifest as the master of non-referential compassion\n\nབསྟན་མཛད་ལེགས་པའི་ལམ་སྟོན་སྨྲ་བའི་ཉི།\nTen dzé lek pé lam tön ma wé nyi\nGuide on the path of excellent teachings, Sun of Speech\n\nབླ་མ་སྤྱན་རས་གཟིགས་ལ་གསོལ་བ་འདེབས།\nLa ma chen re zik la sol wa deb\nLama Avalokiteśvara, to you I pray\n\nསྐྱེ་བ་ཀུན་ཏུ་མགོན་པོ་སྤྱན་རས་གཟིགས།\nKye wa kün tu gön po chen re zik\nIn every lifetime, protector Avalokiteśvara\n\nའབྲལ་མེད་གཙུག་གི་རྒྱན་དུ་ཐོབ་པ་དང་།\nDral mé tsuk gi gyen du tob pa dang\nMay you always remain on my crown without ever separating\n\nདེའི་གསུང་གདམས་དོན་མ་ནོར་ཉམས་བླངས་ནས།\nDé sung dam dön ma nor nyam lang né\nBless me so that, practising the true meaning of your speech correctly\n\nགཏན་བདེའི་རྩ་བ་ཚུགས་པར་བྱིན་གྱིས་རློབས།\nTen dé tsa wa tsuk par jin gyi lob\nI may establish the roots of everlasting bliss and happiness",
+    "closingText": "དགེ་བ་འདི་ཡིས་མྱུར་དུ་བདག\nGé wa di yi nyur du dag\nBy this merit, may I swiftly\n\nསྤྱན་རས་གཟིགས་དབང་འགྲུབ་གྱུར་ནས།\nChen re zig wang drub gyur né\nAttain the state of Chenrezig\n\nའགྲོ་བ་གཅིག་ཀྱང་མ་ལུས་པ།\nDro wa chik kyang ma lü pa\nAnd may every single living being without exception\n\nདེ་དག་ས་ལ་འགོད་པར་ཤོག།\nDé dak sa la gö par shog\nBe established in that very same level.",
+    "defaultImagePath": "images/Chenrezig_thangkha-FINAL.png",
+    "deityInfo": "CHENREZIG (Avalokiteshvara) - The Bodhisattva of Infinite Compassion\n\nSignificance:\nChenrezig embodies the compassion of all Buddhas. He is the patron deity of Tibet and one of the most beloved figures in Buddhism. His name means 'The One Who Looks Down with Unwavering Compassion'.\n\nKey Qualities:\n• Infinite compassion for all beings\n• The ability to see the suffering of all beings\n• Unconditional love and mercy\n• Swift response to prayers\n\nThe Mantra: OM MANI PADME HUM\nThis six-syllable mantra contains the entire path to enlightenment:\n• OM - Purifies pride/ego\n• MA - Purifies jealousy\n• NI - Purifies attachment/passion\n• PAD - Purifies ignorance/prejudice\n• ME - Purifies possessiveness/greed\n• HUM - Purifies hatred/aggression\n\nVisualization:\nChenrezig appears white in color with four arms. The first two hands are pressed together at the heart holding a wish-fulfilling jewel. The right hand holds a crystal mala, the left hand holds a white lotus flower. He sits on a moon disc atop a lotus throne.\n\nBenefits of Practice:\n• Develops compassion and loving-kindness\n• Purifies negative karma\n• Brings peace and harmony to the mind\n• Protects from harm and obstacles\n• Helps fulfill one's spiritual aspirations\n\nConnection to the Dalai Lama:\nThe Dalai Lama is considered an emanation of Chenrezig, continuing the bodhisattva's work of compassion in the world today.",
+    "stages": [
+        {
+            "name": "About Chenrezig",
+            "liturgyText": "",
+            "mantraText": "",
+            "showImage": true,
+            "showMantra": false
+        },
+        {
+            "name": "Opening",
+            "liturgyText": "Opening prayers for Chenrezig...",
+            "mantraText": "",
+            "showImage": true,
+            "showMantra": false
+        },
+        {
+            "name": "Main Practice",
+            "liturgyText": "",
+            "mantraText": "Om Mani Padme Hum",
+            "showImage": true,
+            "showMantra": true
+        },
+        {
+            "name": "Closing",
+            "liturgyText": "Dedication and auspicious wishes...",
+            "mantraText": "",
+            "showImage": true,
+            "showMantra": false
+        }
+    ]
+}
