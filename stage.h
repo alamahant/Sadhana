@@ -18,7 +18,7 @@ struct Stage
     // Display flags
    // bool usePdf = false;            // true = show PDF, false = show text
     bool showImage = true;         // true = show image, false = hide
-    bool showMantra;        // true = show mantra, false = hide
+    bool showMantra = true;        // true = show mantra, false = hide
     int lifetimeCount;
 };
 

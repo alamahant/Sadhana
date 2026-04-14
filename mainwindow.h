@@ -36,6 +36,8 @@ private slots:
     void showAboutDialog();
     void showInstructionsDialog();
     void showRespectDialog();
+    void showFindResourcesDialog();
+
 private:
     void setupUI();
     void setupMenuBar();
@@ -43,7 +45,7 @@ private:
 
     QStackedWidget* m_stackedWidget;
     GridView* m_gridView;
-    PujaView* m_pujaView;
+    PujaView* m_pujaView = nullptr;
     void refreshGrid();
     ReaderDialog* readerDialog = nullptr;
     TibetanCalendarDialog* calendarDialog = nullptr;

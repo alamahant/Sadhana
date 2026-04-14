@@ -35,6 +35,7 @@ qt_add_executable(Sadhana
     journaldialog.cpp journaldialog.h
     constants.cpp constants.h
     resources.qrc
+    donationdialog.cpp donationdialog.h
 )
 
 target_link_libraries(Sadhana
@@ -76,6 +77,42 @@ install(TARGETS Sadhana
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+if(FLATPAK_BUILD)
+    # Install desktop file
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.alamahant.Sadhana.desktop"
+            DESTINATION "share/applications")
+
+    # Install metainfo file
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.alamahant.Sadhana.metainfo.xml"
+            DESTINATION "share/metainfo")
+
+    # Install app icon from root directory
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.alamahant.Sadhana.png"
+            DESTINATION "share/icons/hicolor/512x512/apps"
+            RENAME "io.github.alamahant.Sadhana.png")
+
+    # Install icons from favicon directory
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/favicon_io/android-chrome-192x192.png"
+            DESTINATION "share/icons/hicolor/192x192/apps"
+            RENAME "io.github.alamahant.Sadhana.png")
+
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/favicon_io/favicon-16x16.png"
+            DESTINATION "share/icons/hicolor/16x16/apps"
+            RENAME "io.github.alamahant.Sadhana.png")
+
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/favicon_io/favicon-32x32.png"
+            DESTINATION "share/icons/hicolor/32x32/apps"
+            RENAME "io.github.alamahant.Sadhana.png")
+
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/favicon_io/apple-touch-icon.png"
+            DESTINATION "share/icons/hicolor/180x180/apps"
+            RENAME "io.github.alamahant.Sadhana.png")
+
+
+endif()
+
+
 
 qt_finalize_executable(Sadhana)
 

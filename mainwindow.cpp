@@ -14,6 +14,7 @@
 #include<QDesktopServices>
 #include<QDir>
 #include<QFileDialog>
+#include"donationdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -128,12 +129,19 @@ void MainWindow::setupMenuBar()
     QAction* instructionsAction = helpMenu->addAction("&Instructions");
     connect(instructionsAction, &QAction::triggered, this, &MainWindow::showInstructionsDialog);
 
+    QAction* resourcesAction = helpMenu->addAction("&Find Practice Resources");
+        connect(resourcesAction, &QAction::triggered, this, &MainWindow::showFindResourcesDialog);
+
     QAction* respectAction = helpMenu->addAction("&A Friendly Note");
     connect(respectAction, &QAction::triggered, this, &MainWindow::showRespectDialog);
 
     helpMenu->addSeparator();
-
-
+    QAction *supportusAction = helpMenu->addAction("Support Us");
+                connect(supportusAction, &QAction::triggered, [this]() {
+                    DonationDialog dialog(this);
+                    dialog.exec();
+                });
+    helpMenu->addAction(supportusAction);
 }
 
 
@@ -175,10 +183,10 @@ void MainWindow::applyDarkTheme()
         QPushButton:pressed {
             background-color: #2a5e95;
         }
-QPushButton:checked {
-    background-color: #ffd700;
-    color: black;
-}
+        QPushButton:checked {
+            background-color: #ffd700;
+            color: black;
+        }
         QMessageBox {
             background-color: #2a2a2a;
             color: #ffffff;
@@ -265,24 +273,21 @@ QPushButton:checked {
         }
         QScrollBar::handle:vertical:hover {
             background-color: #777;
+                }
+        QSlider::groove:horizontal {
+            background: #3a3a3a;
+            height: 4px;
+            border-radius: 2px;
         }
-QSlider::groove:horizontal {
-    background: #3a3a3a;
-    height: 4px;
-    border-radius: 2px;
-}
-QSlider::handle:horizontal {
-    background: #ffd700;
-    width: 12px;
-    margin: -4px 0;
-    border-radius: 6px;
-}
-QSlider::handle:horizontal:hover {
-    background: #ffcc00;
-}
-
-
-
+        QSlider::handle:horizontal {
+            background: #ffd700;
+            width: 12px;
+            margin: -4px 0;
+            border-radius: 6px;
+        }
+        QSlider::handle:horizontal:hover {
+            background: #ffcc00;
+        }
 )";
     qApp->setStyleSheet(darkStyle);
 }
@@ -787,4 +792,119 @@ void MainWindow::showRespectDialog()
     respectBox.setStandardButtons(QMessageBox::Ok);
     respectBox.setStyleSheet("QMessageBox { background-color: #1a1a1a; } QMessageBox QLabel { color: #ffffff; min-width: 480px; }");
     respectBox.exec();
+}
+
+
+void MainWindow::showFindResourcesDialog()
+{
+    QDialog* dialog = new QDialog(this);
+    dialog->setWindowTitle("Find Practice Resources");
+    dialog->setMinimumSize(550, 450);
+    dialog->resize(600, 500);
+    dialog->setStyleSheet("QDialog { background-color: #1a1a1a; }");
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    QVBoxLayout* layout = new QVBoxLayout(dialog);
+    layout->setContentsMargins(15, 15, 15, 15);
+    layout->setSpacing(10);
+
+    QTextBrowser* textBrowser = new QTextBrowser(dialog);
+
+#ifdef FLATPAK_BUILD
+    textBrowser->setOpenExternalLinks(false);
+    connect(textBrowser, &QTextBrowser::anchorClicked, this, [this, dialog](const QUrl& link) {
+        if (link.scheme() == "http" || link.scheme() == "https") {
+            QDesktopServices::openUrl(link);
+            dialog->close();
+            showFindResourcesDialog();
+        }
+    });
+#else
+    textBrowser->setOpenExternalLinks(true);
+#endif
+
+
+
+    // Rest of your stylesheet...
+    textBrowser->setStyleSheet(R"(
+        QTextBrowser {
+            background-color: #111;
+            color: #ffffff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Noto Serif Tibetan', sans-serif;
+            font-size: 13px;
+        }
+        QTextBrowser h2 { color: #ffd700; margin-bottom: 15px; }
+        QTextBrowser h3 { color: #ffd700; margin: 15px 0 5px 0; }
+        QTextBrowser p { margin: 5px 0; line-height: 1.5; }
+        QScrollBar:vertical { background-color: #2a2a2a; width: 12px; border-radius: 6px; }
+        QScrollBar::handle:vertical { background-color: #555; border-radius: 6px; min-height: 20px; }
+        QScrollBar::handle:vertical:hover { background-color: #777; }
+    )");
+
+    QString html = R"(
+        <h2>Finding Resources for Your Modules</h2>
+
+        <p>
+            Sadhana is designed to be a flexible framework. You can enrich your practice by finding
+            authentic texts, images, and audio from a variety of online sources. Here are some suggestions:
+        </p>
+
+        <h3>Texts and Translations</h3>
+        <p>
+            • <a href="https://www.lotsawahouse.org/">Lotsawa House</a> - A rich trove of sadhanas and Buddhist texts in translation.<br>
+            • <a href="https://www.84000.co/">84000: Translating the Words of the Buddha</a> - Canonical sūtras and tantras.<br>
+            • <a href="https://www.sakya.org/">Sakya Resource Center</a> - Extensive collection of practice texts.<br>
+            • <a href="https://fpmt.org/education/prayers-and-practices/">FPMT Prayers and Practices</a> - Free PDF sadhanas.
+        </p>
+
+        <h3>Mantra Recitation Videos (YouTube)</h3>
+        <p>
+            • Search for specific mantras to find traditional chanting styles.<br>
+            • Many channels offer guided recitations with correct pronunciation.<br>
+            • Look for recordings by authentic lineage teachers and monasteries.
+        </p>
+
+        <h3>Facebook Communities</h3>
+        <p>
+            • <a href="https://www.facebook.com/kgyaltshen">Khenpo Gyaltshen's Page</a> - Teachings and practice materials.<br>
+            • <a href="https://www.facebook.com/ngawang123">Ngawang's Profile</a> - Additional resources and inspiration.<br>
+            • Search for groups related to your specific tradition or practice.
+        </p>
+
+        <h3 style="color: #ffd700; margin-top: 25px;">Important Usage Notice</h3>
+        <p style="padding: 10px; background-color: #2a2a2a; border-left: 4px solid #ffd700; border-radius: 4px;">
+            <b>Personal Use Only:</b> Materials found online are for your <b>personal practice only</b>.
+            Do not redistribute, republish, or share files obtained from these sources without explicit
+            permission from the copyright holders. Respecting the intellectual property of translators,
+            artists, and teachers is an essential part of Dharma practice.
+        </p>
+
+        <p style="margin-top: 20px; color: #aaaaaa; font-style: italic;">
+            Tip: When assigning images, audio, or PDFs in Sadhana, use the "Assign" buttons in the
+            control panel to link to files stored locally on your device.
+        </p>
+    )";
+
+    textBrowser->setHtml(html);
+    layout->addWidget(textBrowser);
+
+    QPushButton* closeButton = new QPushButton("Close", dialog);
+    closeButton->setFixedHeight(32);
+    closeButton->setFixedWidth(100);
+    closeButton->setStyleSheet(R"(
+        QPushButton { background-color: #3a6ea5; color: white; border: none; border-radius: 4px; }
+        QPushButton:hover { background-color: #4a7eb5; }
+    )");
+    connect(closeButton, &QPushButton::clicked, dialog, &QDialog::accept);
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(closeButton);
+    buttonLayout->addStretch();
+    layout->addLayout(buttonLayout);
+
+    dialog->exec();
 }

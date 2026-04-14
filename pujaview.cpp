@@ -532,8 +532,10 @@ void PujaView::onToggleControlPanel()
     } else {
         // Showing control panel - restore based on m_currentlyShowingPdf
         m_togglePanelButton->setText("▼ Show Controls");
-        m_imageLabel->setVisible(!m_imageLabel->pixmap().isNull());
-        m_mantraLabel->setVisible(!m_mantraLabel->text().isEmpty());
+        if(hasImage) m_imageLabel->setVisible(true);
+
+        //if(hasMantra) m_mantraLabel->setVisible(!m_mantraLabel->text().isEmpty());
+        if(hasMantra) m_mantraLabel->setVisible(true);
 
         if (m_currentlyShowingPdf) {
             m_pdfView->setVisible(true);
@@ -561,8 +563,11 @@ void PujaView::onSectionClicked(int sectionIndex)
 
     if (sectionIndex == 2) {
         m_mantraLabel->setVisible(true);
+        hasMantra = true;
     } else {
         m_mantraLabel->setVisible(false);
+        hasMantra = false;
+
     }
 }
 
@@ -669,10 +674,7 @@ void PujaView::onDurationChanged(qint64 duration)
 void PujaView::onAssignImage()
 {
 
-    qDebug() << "m_currentStageIndex:" << m_currentStageIndex;
-        qDebug() << "m_currentStages.size():" << m_currentStages.size();
-        qDebug() << "m_isCustomModule:" << m_isCustomModule;
-        qDebug() << "m_currentCustomModule:" << m_currentCustomModule;
+
 
     if (m_isCustomModule && m_currentCustomModule) {
         // Custom module - save to current stage
@@ -685,6 +687,7 @@ void PujaView::onAssignImage()
             m_currentStages[m_currentStageIndex].imagePath = filePath;
             m_currentCustomModule->setStages(m_currentStages);
             ModuleManager::instance().saveCustomModule(m_currentCustomModule);
+            hasImage = true;
             m_togglePanelButton->click();
 
             loadStage(m_currentStageIndex); // Refresh display
@@ -704,6 +707,7 @@ void PujaView::onAssignImage()
         if (!filePath.isEmpty()) {
             m_togglePanelButton->click();
             ModuleManager::instance().saveImageOverride(m_currentModule->id(), filePath);
+            hasImage = true;
             m_currentModule->setUserImagePath(filePath);
             updateImageDisplay();
 
@@ -834,13 +838,13 @@ void PujaView::keyPressEvent(QKeyEvent* event)
 
             // Show all controls
             m_backButton->setVisible(true);
-            m_mantraLabel->setVisible(true);
+            if(hasMantra) m_mantraLabel->setVisible(true);
             m_dotsContainer->setVisible(true);
             m_togglePanelButton->setVisible(true);
             //m_controlPanel->setVisible(true);
             m_pdfView->setVisible(isPdf);
             m_textArea->setVisible(!isPdf);
-            m_imageLabel->setVisible(true);
+            if(hasImage) m_imageLabel->setVisible(true);
 
             // Restore original sizes
             m_imageLabel->setFixedSize(280, 280);
@@ -974,6 +978,7 @@ void PujaView::loadStage(int index)
         // Load image from default module
         QString imagePath = m_currentModule->effectiveImagePath();
         if (!imagePath.isEmpty()) {
+            hasImage = true;
             QPixmap pixmap(imagePath);
             if (!pixmap.isNull()) {
                 QPixmap scaled = pixmap.scaled(280, 280, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -981,9 +986,16 @@ void PujaView::loadStage(int index)
                 m_imageLabel->setVisible(true);
             }
         } else {
+            hasImage = false;
             m_imageLabel->setVisible(false);
         }
 
+        if(m_mantraLabel->text().isEmpty()){
+            hasMantra = false;
+        }else{
+            hasMantra = true;;
+
+        }
         // Load content based on stage index
         if (index == 0) {
             // About/Info stage
@@ -992,6 +1004,9 @@ void PujaView::loadStage(int index)
             mantraLabelCpanel->setVisible(false);
             m_pdfView->setVisible(false);
             m_textArea->setVisible(true);
+            m_imageLabel->setVisible(true);
+            m_mantraLabel->setVisible(false);
+            hasMantra = false;
         } else if (index == 1) {
             // Opening
             m_textArea->setText(m_currentModule->openingText());
@@ -999,6 +1014,10 @@ void PujaView::loadStage(int index)
             mantraLabelCpanel->setVisible(false);
             m_pdfView->setVisible(false);
             m_textArea->setVisible(true);
+            m_imageLabel->setVisible(true);
+            m_mantraLabel->setVisible(false);
+            hasMantra = false;
+
         } else if (index == 2) {
             // Main practice
             m_textArea->setText("");
@@ -1010,6 +1029,10 @@ void PujaView::loadStage(int index)
             m_addButton->setEnabled(true);
             m_pdfView->setVisible(false);
             m_textArea->setVisible(true);
+            m_imageLabel->setVisible(true);
+            m_mantraLabel->setVisible(true);
+            hasMantra = true;
+
         } else if (index == 3) {
             // Closing
             m_textArea->setText(m_currentModule->closingText());
@@ -1017,6 +1040,10 @@ void PujaView::loadStage(int index)
             mantraLabelCpanel->setVisible(false);
             m_pdfView->setVisible(false);
             m_textArea->setVisible(true);
+            m_imageLabel->setVisible(true);
+            m_mantraLabel->setVisible(false);
+            hasMantra = false;
+
         }
         // Clear editors
         m_liturgyEdit->clear();
@@ -1067,19 +1094,22 @@ void PujaView::loadStage(int index)
     if (stage.showImage && !stage.imagePath.isEmpty()) {
         QPixmap pixmap(stage.imagePath);
         if (!pixmap.isNull()) {
+            hasImage = true;
             QPixmap scaled = pixmap.scaled(280, 280,
                     Qt::KeepAspectRatio,
                     Qt::SmoothTransformation);
             m_imageLabel->setPixmap(scaled);
             m_imageLabel->setVisible(true);
         } else {
+            hasImage = false;
             m_imageLabel->setVisible(false);
         }
     } else {
+        hasImage = false;
         m_imageLabel->setVisible(false);
     }
     // Load mantra
-    bool hasMantra = stage.showMantra && !stage.mantraText.isEmpty();
+    hasMantra = stage.showMantra && !stage.mantraText.isEmpty();
     if (hasMantra) {
         m_mantraLabel->setText(stage.mantraText);
         m_mantraLabel->setVisible(true);
@@ -1131,7 +1161,7 @@ void PujaView::loadStage(int index)
         m_pdfView->setVisible(false);
         m_textArea->setVisible(true);
         m_textArea->setText(stage.liturgyText);
-        m_textArea->setAlignment(Qt::AlignCenter);
+        //m_textArea->setAlignment(Qt::AlignCenter);
         m_viewPdfButton->setText("View PDF");
     }
 
@@ -1153,11 +1183,7 @@ void PujaView::loadStage(int index)
         m_totalCountLabel->setText(QString::number(stage.lifetimeCount));
     }
 
-    // Load into editors for custom modules
-    if (m_isCustomModule) {
-        m_liturgyEdit->setText(stage.liturgyText);
-        m_mantraEdit->setText(stage.mantraText);
-    }
+
 
     // Update image label
     if (!stage.imagePath.isEmpty()) {
@@ -1181,9 +1207,17 @@ void PujaView::loadStage(int index)
 
     // Load into editors for custom modules
     if (m_isCustomModule) {
+        m_liturgyEdit->blockSignals(true);
+        m_mantraEdit->blockSignals(true);
+        m_stageNameEdit->blockSignals(true);
+
         m_liturgyEdit->setText(stage.liturgyText);
         m_mantraEdit->setText(stage.mantraText);
         m_stageNameEdit->setText(stage.name);
+
+        m_liturgyEdit->blockSignals(false);
+        m_mantraEdit->blockSignals(false);
+        m_stageNameEdit->blockSignals(false);
     }
     m_loadingStage = false;
 }
@@ -1199,7 +1233,7 @@ void PujaView::onLiturgyTextChanged()
         }
         // Update display if not in PDF mode
             m_textArea->setText(m_currentStages[m_currentStageIndex].liturgyText);
-            m_textArea->setAlignment(Qt::AlignCenter);
+            //m_textArea->setAlignment(Qt::AlignCenter);
         }
     }
 
@@ -1211,6 +1245,7 @@ void PujaView::onMantraTextChanged()
         if (m_currentCustomModule) {
             m_currentCustomModule->setStages(m_currentStages);
             ModuleManager::instance().saveCustomModule(m_currentCustomModule);
+            hasMantra = true;
         }
         // Update display
         if (m_currentStages[m_currentStageIndex].showMantra) {
@@ -1428,7 +1463,8 @@ void PujaView::addNewStage()
 
     // Save to disk
     ModuleManager::instance().saveCustomModule(m_currentCustomModule);
-
+    hasMantra = false;
+    hasImage = false;
     // Rebuild dots
     rebuildStageDots();
 
@@ -1477,7 +1513,6 @@ void PujaView::loadModule(DeityModule* module)
     m_currentModule = module;
     m_isCustomModule = false;
     m_currentCustomModule = nullptr;
-
     // Load stages from module (default modules now have stages)
     m_currentStages = module->stages();
     m_currentStageIndex = 0;

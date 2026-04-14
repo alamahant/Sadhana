@@ -153,6 +153,8 @@ private:
     QString getCurrentModuleName();
     QUrl m_nextAudioUrl = QUrl();
     QPushButton* m_infoButton;
+    bool hasMantra = false;
+    bool hasImage = false;
 };
 
 #endif // PUJAVIEW_H

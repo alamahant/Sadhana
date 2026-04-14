@@ -27,7 +27,7 @@ CreateModuleDialog::CreateModuleDialog(QWidget* parent)
     mainLayout->addWidget(nameLabel);
     mainLayout->addWidget(m_nameEdit);
     
-    // Image selection (optional)
+    // Image selection
     QLabel* imageLabel = new QLabel("Default Image (optional):", this);
     m_browseButton = new QPushButton("Browse...", this);
     m_imagePreview = new QLabel(this);

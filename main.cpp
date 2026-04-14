@@ -36,10 +36,8 @@ int main(int argc, char *argv[])
         int id = QFontDatabase::addApplicationFont(tibetanFont);
         if (id != -1) {
             QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-            qDebug() << "Loaded Tibetan font:" << family;
         }
     } else {
-        qDebug() << "Tibetan font not found at:" << tibetanFont;
     }
 
     // Load Lohit Devanagari
@@ -48,7 +46,6 @@ int main(int argc, char *argv[])
         int id = QFontDatabase::addApplicationFont(devanagariFont);
         if (id != -1) {
             QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-            qDebug() << "Loaded Devanagari font:" << family;
         }
     }
 
@@ -58,7 +55,6 @@ int main(int argc, char *argv[])
         int id = QFontDatabase::addApplicationFont(chineseFont);
         if (id != -1) {
             QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-            qDebug() << "Loaded Chinese font:" << family;
         }
     }
 

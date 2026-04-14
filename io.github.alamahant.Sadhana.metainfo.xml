@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="desktop-application">
+
+  <id>io.github.alamahant.Sadhana</id>
+  <name>Sadhana</name>
+  <summary>A digital shrine and practice tracker</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+
+  <project_license>GPL-3.0-or-later</project_license>
+  <url type="vcs-browser">https://github.com/alamahant/Sadhana</url>
+  <description>
+    <p>
+      Sadhana is a cross-platform desktop application designed to support and enhance your daily
+      spiritual practice. It provides a structured, customizable environment for working with
+      traditional liturgies, mantras, and deity visualizations, while helping you track your
+      progress over time.
+    </p>
+
+    <p>
+      Deity Practice Modules:
+    </p>
+    <ul>
+      <li>Pre-loaded modules for Chenrezig, Green Tara, Guru Rinpoche, and Manjushri</li>
+      <li>Four-stage practice structure: About, Opening, Main Practice, and Closing</li>
+      <li>Traditional Tibetan liturgy with phonetic and English translations</li>
+      <li>Beautiful deity imagery with fullscreen zoomable view</li>
+    </ul>
+
+    <p>
+      Custom Modules:
+    </p>
+    <ul>
+      <li>Create unlimited custom practice modules with any number of stages</li>
+      <li>Add custom liturgy text, mantras, images, audio, and PDFs per stage</li>
+      <li>Load liturgy from text files or edit directly in the application</li>
+      <li>Right-click modules to change grid images or delete</li>
+    </ul>
+
+    <p>
+      Practice Tracking:
+    </p>
+    <ul>
+      <li>Lifetime and session-based mantra counters for consistent accumulation</li>
+      <li>Integrated journal with date-based entry browsing</li>
+      <li>Automatic logging of sessions with module, stage, and repetition counts</li>
+      <li>JSON data storage for easy backup and portability</li>
+    </ul>
+
+    <p>
+      Tibetan Calendar:
+    </p>
+    <ul>
+      <li>Display of Tibetan lunar dates alongside Gregorian calendar</li>
+      <li>Highlighted special observance days (Düchen) with karmic multipliers</li>
+      <li>Pre-loaded with data from 2025 through 2049</li>
+    </ul>
+
+    <p>
+      Audio and Media:
+    </p>
+    <ul>
+      <li>Built-in audio player with play/pause, stop, and progress seeking</li>
+      <li>Volume control and optional repeat mode for continuous mantra playback</li>
+      <li>Support for MP3, WAV, FLAC, M4A, OGG, and other common formats</li>
+      <li>PDF viewer with zoom, fit-to-width, and multi-page display</li>
+    </ul>
+
+    <p>
+      User Interface:
+    </p>
+    <ul>
+      <li>Dark theme with gold accents designed for focused practice</li>
+      <li>Grid view for easy module selection with customizable images</li>
+      <li>Keyboard shortcuts for all major functions (navigation, fullscreen, zoom)</li>
+      <li>Integrated Reader with tabs for text files, PDFs, and plain-text editing</li>
+      <li>Resizable panels and scrollable text areas for extended liturgy</li>
+    </ul>
+  </description>
+
+  <url type="homepage">https://github.com/alamahant/Sadhana</url>
+  <url type="bugtracker">https://github.com/alamahant/Sadhana/issues</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main grid view with deity modules</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/main.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Practice view with Chenrezig module</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/practice.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Tibetan calendar with special observance days</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/calendar.png</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="1.0.0" date="2026-04-14">
+      <description>
+        <p>Initial release of Sadhana:</p>
+        <ul>
+          <li>Four default deity modules: Chenrezig, Green Tara, Guru Rinpoche, and Manjushri</li>
+          <li>Complete Tibetan liturgy with phonetic and English translations</li>
+          <li>Custom module creation with unlimited stages</li>
+          <li>Mantra counter with lifetime and session tracking</li>
+          <li>Integrated practice journal</li>
+          <li>Tibetan Buddhist calendar with special observance days (2025-2049)</li>
+          <li>Audio player with repeat functionality</li>
+          <li>PDF viewer and text editor</li>
+          <li>Fullscreen image and text viewing</li>
+          <li>Dark theme interface with gold accents</li>
+          <li>Keyboard shortcuts for efficient navigation</li>
+          <li>Cross-platform support (Linux Flatpak, Windows, macOS)</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+
+  <developer_name>Alamahant</developer_name>
+
+  <categories>
+    <category>Graphics</category>
+    <category>Utility</category>
+    <category>Education</category>
+    <category>Spirituality</category>
+  </categories>
+
+  <keywords>
+    <keyword>sadhana</keyword>
+    <keyword>meditation</keyword>
+    <keyword>mantra</keyword>
+    <keyword>buddhist</keyword>
+    <keyword>tibetan</keyword>
+    <keyword>practice</keyword>
+    <keyword>puja</keyword>
+    <keyword>chenrezig</keyword>
+    <keyword>tara</keyword>
+    <keyword>guru rinpoche</keyword>
+    <keyword>manjushri</keyword>
+    <keyword>liturgy</keyword>
+    <keyword>prayer</keyword>
+    <keyword>tracker</keyword>
+    <keyword>journal</keyword>
+    <keyword>calendar</keyword>
+    <keyword>spirituality</keyword>
+    <keyword>dharma</keyword>
+    <keyword>contemplation</keyword>
+    <keyword>chanting</keyword>
+  </keywords>
+
+  <content_rating type="oars-1.1" />
+
+  <launchable type="desktop-id">io.github.alamahant.Sadhana.desktop</launchable>
+
+  <provides>
+    <binary>Sadhana</binary>
+  </provides>
+
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </recommends>
+
+</component>

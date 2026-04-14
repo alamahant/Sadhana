@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Sadhana
+GenericName=Digital Shrine and Practice Tracker
+Comment=A digital shrine and practice tracker for spiritual practitioners with Tibetan liturgy, mantra counters, and customizable modules
+Icon=io.github.alamahant.Sadhana
+Exec=Sadhana
+Terminal=false
+Categories=Utility;Education;Spirituality;Graphics;
+Keywords=sadhana;meditation;mantra;buddhist;tibetan;practice;puja;chenrezig;tara;guru rinpoche;manjushri;liturgy;prayer;tracker;journal;calendar;spirituality;dharma;contemplation;chanting;
+StartupNotify=true
+X-Flatpak=io.github.alamahant.Sadhana
