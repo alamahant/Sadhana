@@ -59,6 +59,8 @@ if(FLATPAK_BUILD)
     )
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/files
         DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/images
+        DESTINATION ${CMAKE_INSTALL_BINDIR})
 else()
     add_custom_command(TARGET Sadhana POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
