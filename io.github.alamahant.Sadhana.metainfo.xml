@@ -81,18 +81,50 @@
   <url type="homepage">https://github.com/alamahant/Sadhana</url>
   <url type="bugtracker">https://github.com/alamahant/Sadhana/issues</url>
 
-  <screenshots>
+    <screenshots>
     <screenshot type="default">
       <caption>Main grid view with deity modules</caption>
       <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/main.png</image>
     </screenshot>
     <screenshot>
       <caption>Practice view with Chenrezig module</caption>
-      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/practice.png</image>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/dhakini.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Practice view with Vajrasattva module</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/vajrasatva.png</image>
     </screenshot>
     <screenshot>
       <caption>Tibetan calendar with special observance days</caption>
       <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/calendar.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Control panel with audio and counter</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/control-panel.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Control panel expanded view</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/control-panel-B.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Fullscreen text view</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/fullscreen.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Medicine Buddha practice with PDF</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/medicine-buddha-pdf.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>PDF in fullscreen mode</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/pdf-full.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Practice journal with entry browsing</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/journal.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Reader with text and PDF tabs</caption>
+      <image>https://raw.githubusercontent.com/alamahant/Sadhana/master/screenshots/Reader.png</image>
     </screenshot>
   </screenshots>
 

@@ -2,6 +2,8 @@
 
 **A Digital Shrine and Practice Tracker for Buddhist Practitioners**
 
+![Sadhana Screenshot](screenshots/main.png)
+
 Sadhana is a cross-platform desktop application designed to support and enhance your daily Buddhist practice. It provides a structured, customizable environment for working with traditional liturgies, mantras, and deity visualizations, while helping you track your progress over time.
 
 > **Note:** Although made with Tibetan Buddhism in mind and intent, Sadhana can be used for any puja or sadhana practice, including Hindu, Chinese, or Christian contemplative traditions. The custom module system allows you to create practice sequences for any spiritual path.

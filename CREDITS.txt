@@ -1,0 +1,22 @@
+CREDITS
+=======
+
+Images
+------
+* Guru Rinpoche (Padmasambhava) and Chenrezig (Avalokiteshvara) images are used with gratitude
+  and sourced from the Garchen Buddhist Institute: https://garchen.net/
+
+* Manjushri and Green Tara images are used with gratitude and sourced from
+  Himalayan Art Resources: https://www.himalayanart.org/
+
+* Application icons were generated using favicon.io: https://favicon.io/
+
+Software & Development
+---------------------
+Sadhana is developed by Alamahant.
+This application is built using the Qt framework: https://www.qt.io/
+
+Liturgy & Texts
+---------------
+The traditional Tibetan liturgy included in this application is sourced from
+various traditional Buddhist prayer collections and is used for practice purposes.
