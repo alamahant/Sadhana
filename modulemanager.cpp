@@ -56,6 +56,7 @@ DeityModule* ModuleManager::loadModuleFromJson(const QString& jsonPath)
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     QJsonObject obj = doc.object();
 
+    /*
     DeityModule* module = new DeityModule(
         obj["id"].toString(),
         obj["name"].toString(),
@@ -63,6 +64,25 @@ DeityModule* ModuleManager::loadModuleFromJson(const QString& jsonPath)
         obj["openingText"].toString(),
         obj["closingText"].toString(),
         obj["defaultImagePath"].toString()
+    );
+*/
+
+    QString imagePath = obj["defaultImagePath"].toString();
+
+    // If it's NOT a Qt resource, make it absolute inside Flatpak
+    if (!imagePath.startsWith(":/")) {
+    #ifdef FLATPAK_BUILD
+        imagePath = QCoreApplication::applicationDirPath() + "/" + imagePath;
+    #endif
+    }
+
+    DeityModule* module = new DeityModule(
+        obj["id"].toString(),
+        obj["name"].toString(),
+        obj["mantraText"].toString(),
+        obj["openingText"].toString(),
+        obj["closingText"].toString(),
+        imagePath
     );
 
     module->setDeityInfo(obj["deityInfo"].toString());
