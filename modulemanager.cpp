@@ -9,6 +9,7 @@
 #include <QStandardPaths>
 #include <QJsonObject>
 #include"constants.h"
+#include<QCoreApplication>
 
 ModuleManager& ModuleManager::instance()
 {
