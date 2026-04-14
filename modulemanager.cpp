@@ -33,21 +33,13 @@ void ModuleManager::loadModules()
 
 void ModuleManager::createDefaultModules()
 {
-#ifdef FLATPAK_BUILD
-    QStringList moduleFiles = {
-        "modules/chenrezig.json",
-        "modules/tara.json",
-        "modules/guru.json",
-        "modules/manjushri.json"
-    };
-#else
+
     QStringList moduleFiles = {
         ":/modules/chenrezig.json",
         ":/modules/tara.json",
         ":/modules/guru.json",
         ":/modules/manjushri.json"
     };
-#endif
     for (const QString& filePath : moduleFiles) {
         DeityModule* module = loadModuleFromJson(filePath);
         if (module) {
