@@ -1031,7 +1031,7 @@ void MainWindow::showChangelogDialog()
             They may be restored in a future update. In the meantime, use the <b>"+ Create Custom Module"</b>
             button to build practices that match your own tradition or needs.
         </div>
-    )").arg(Constants::appDirPath);
+    )");
 
     textBrowser->setHtml(html);
     layout->addWidget(textBrowser);
