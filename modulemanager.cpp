@@ -35,11 +35,14 @@ void ModuleManager::loadModules()
 void ModuleManager::createDefaultModules()
 {
 
+
     QStringList moduleFiles = {
-        ":/modules/chenrezig.json",
-        ":/modules/tara.json",
-        ":/modules/guru.json",
-        ":/modules/manjushri.json"
+        //":/modules/chenrezig.json",
+        //":/modules/tara.json",
+        //":/modules/guru.json",
+        //":/modules/manjushri.json"
+        ":/modules/example.json"
+
     };
     for (const QString& filePath : moduleFiles) {
         DeityModule* module = loadModuleFromJson(filePath);

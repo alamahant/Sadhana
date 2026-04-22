@@ -1,0 +1,39 @@
+{
+    "id": "sadhana_instruction_module",
+    "name": "Sadhana",
+    "mantraText": "A Fantastic And Powerful Mantra",
+    "openingText": "WELCOME TO SADHANA\n\nSadhana is a flexible digital practice tracker. It helps you organize and track repeated recitations, readings, or contemplative practices — whatever form they take.\n\nTHE CORE IDEA:\n\nYou create the structure that fits YOUR needs. Not the other way around.\n\n▸ You decide how many stages your practice has\n▸ You decide what text goes in each stage\n▸ You decide what mantra or recitation to repeat\n▸ You decide which images, audio files, or PDFs to include\n▸ You decide how many repetitions to log\n\nSadhana does not impose a fixed template. It gives you tools. You build your practice.\n\nClick the next dot (→) to continue learning.",
+    "closingText": "CLOSING — YOU ARE READY\n\nYou have completed the instructional tour of Sadhana.\n\nWHAT YOU CAN DO NOW:\n\n• Use existing modules from the grid\n• Create your own custom modules (+ Create Custom Module button)\n• Add unlimited stages to your custom modules\n• Assign audio, images, and PDFs to any stage\n• Track your repetitions with the counter\n• View your history in the Journal (Ctrl+J)\n\nYOUR DATA IS STORED AT:\n\nDocuments/Sadhana/ (standard install)\nor\n~/.var/app/io.github.alamahant.Sadhana/data/Sadhana/ (Flatpak)\n\nBack up this folder to save your data.\n\nClick ← Back to return to the module grid and begin your practice.",
+    "defaultImagePath": "images/io.github.alamahant.Sadhana.png",
+    "deityInfo": "ABOUT SADHANA — COMPLETE REFERENCE\n\nWHAT IS SADHANA?\n\nSadhana is a free, open-source application designed to help you track repeated practices — whether mantras, prayers, affirmations, or any text you wish to recite regularly.\n\nKEY FEATURES:\n\n📊 COUNTER SYSTEM\n• Track lifetime repetitions per module/stage\n• Add session counts with one click\n• Reset counter if needed\n• All data saved locally\n\n📓 JOURNAL (Ctrl+J)\n• Records every session with date, module name, and count\n• Browse by calendar date\n\n🎵 AUDIO SUPPORT\n• Assign audio files (MP3, WAV, FLAC, etc.) to any stage\n• Play, pause, stop, repeat\n• Volume control and progress slider\n\n📄 PDF & IMAGE VIEWER\n• Attach PDF documents to any stage\n• Zoom, fit to width, fit to page (Ctrl+9, Ctrl+8, Ctrl+0)\n• Fullscreen image view with I key\n\n✏️ CUSTOM MODULES\n• Create your own modules (+ Create Custom Module)\n• Add unlimited stages\n• Edit liturgy and mantra text in real time\n• Rename stages\n• Delete modules (right-click on grid)\n\n🗓️ TIBETAN CALENDAR (Ctrl+K)\n• Shows special observance days (Düchen)\n• Displays karmic multipliers\n\n📖 READER (Ctrl+R)\n• Open any text or PDF file\n• Edit and save text documents\n• Multiple tabs\n\nKEYBOARD SHORTCUTS:\n\nCtrl+H — Home grid\nCtrl+R — Reader\nCtrl+K — Calendar\nCtrl+J — Journal\nF — Fullscreen (text/PDF)\nI — Fullscreen image\nEsc — Exit fullscreen\n\nPDF shortcuts:\nCtrl+ / Ctrl- — Zoom\nCtrl+9 — Fit to width\nCtrl+8 — Fit to page\nCtrl+0 — Reset\n\nText shortcuts:\nCtrl+ / Ctrl- — Font size\nCtrl+0 — Reset font\n\nCREATE MULTI-STAGE SESSIONS FOR YOUR NEEDS:\n\nYou are not limited to four stages. Custom modules can have as many stages as you want.\n\nExamples:\n• Morning routine: Reading → Affirmations → Reflection\n• Study session: Review → Recite → Quiz → Summary\n• Meditation: Instructions → Guided audio → Silent sit → Journal\n\nYOU DECIDE THE STRUCTURE.\n\nMay this tool support your practice, whatever form it takes.",
+    "stages": [
+        {
+            "name": "About Sadhana",
+            "liturgyText": "",
+            "mantraText": "",
+            "showImage": false,
+            "showMantra": false
+        },
+        {
+            "name": "Using a Module",
+            "liturgyText": "",
+            "mantraText": "",
+            "showImage": false,
+            "showMantra": false
+        },
+        {
+            "name": "Main Practice Example",
+            "liturgyText": "This is an example of liturgy text that appears above the mantra.\n\nYou can put instructions, visualizations, or notes here.\n\nThe gold text below is the mantra. Recite it and use the counter to track your repetitions.\n\nWhen you create your own custom modules, you can edit both the liturgy text (this box) and the mantra text (the gold text below) directly in the control panel.",
+            "mantraText": "A Fantastic And Powerful Mantra",
+            "showImage": true,
+            "showMantra": true
+        },
+        {
+            "name": "Closing & Next Steps",
+            "liturgyText": "",
+            "mantraText": "",
+            "showImage": false,
+            "showMantra": false
+        }
+    ]
+}

@@ -135,6 +135,9 @@ void MainWindow::setupMenuBar()
     QAction* respectAction = helpMenu->addAction("&A Friendly Note");
     connect(respectAction, &QAction::triggered, this, &MainWindow::showRespectDialog);
 
+    QAction* changelogAction = helpMenu->addAction("&What's New");
+    connect(changelogAction, &QAction::triggered, this, &MainWindow::showChangelogDialog);
+
     helpMenu->addSeparator();
     QAction *supportusAction = helpMenu->addAction("Support Us");
                 connect(supportusAction, &QAction::triggered, [this]() {
@@ -906,5 +909,156 @@ void MainWindow::showFindResourcesDialog()
     buttonLayout->addStretch();
     layout->addLayout(buttonLayout);
 
+    dialog->exec();
+}
+
+
+void MainWindow::showChangelogDialog()
+{
+    QDialog* dialog = new QDialog(this);
+    dialog->setWindowTitle("Changelog");
+    dialog->setMinimumSize(550, 450);
+    dialog->resize(600, 500);
+    dialog->setStyleSheet("QDialog { background-color: #1a1a1a; }");
+
+    QVBoxLayout* layout = new QVBoxLayout(dialog);
+    layout->setContentsMargins(15, 15, 15, 15);
+    layout->setSpacing(10);
+
+    // Scrollable text area
+    QTextBrowser* textBrowser = new QTextBrowser(dialog);
+    textBrowser->setOpenExternalLinks(false);
+    textBrowser->setStyleSheet(R"(
+        QTextBrowser {
+            background-color: #111;
+            color: #ffffff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Noto Serif Tibetan', sans-serif;
+            font-size: 13px;
+        }
+        QTextBrowser h1 {
+            color: #ffd700;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        QTextBrowser h2 {
+            color: #ffd700;
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+        }
+        QTextBrowser h3 {
+            color: #ffd700;
+            font-size: 16px;
+            margin: 15px 0 5px 0;
+        }
+        QTextBrowser p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        QTextBrowser ul {
+            margin: 5px 0 10px 20px;
+        }
+        QTextBrowser li {
+            margin: 3px 0;
+            line-height: 1.5;
+        }
+        QTextBrowser .version {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        QTextBrowser .date {
+            color: #888;
+            font-style: italic;
+        }
+        QTextBrowser .note {
+            color: #ffd700;
+            font-style: italic;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #2a2a2a;
+            border-left: 3px solid #ffd700;
+        }
+        QScrollBar:vertical {
+            background-color: #2a2a2a;
+            width: 12px;
+            border-radius: 6px;
+        }
+        QScrollBar::handle:vertical {
+            background-color: #555;
+            border-radius: 6px;
+            min-height: 20px;
+        }
+        QScrollBar::handle:vertical:hover {
+            background-color: #777;
+        }
+    )");
+
+    QString html = QString(R"(
+        <h1>📋 Changelog</h1>
+        <p>All notable changes to Sadhana are documented here.</p>
+
+        <h2>Version 1.0.1 <span class="date">— April 24, 2026</span></h2>
+        <p><span class="version">Tradition-Agnostic Update</span></p>
+        <ul>
+            <li><b>Temporarily disabled default deity modules</b> (Chenrezig, Green Tara, Guru Rinpoche, Manjushri) to make the application tradition-agnostic out of the box</li>
+            <li><b>Added instructional example module</b> teaching users how to use Sadhana without assuming any specific religious tradition</li>
+            <li>Default modules may be restored in a future update based on user feedback</li>
+            <li>Sadhana now launches as a neutral practice tracking tool — users are encouraged to create their own custom modules that fit their personal needs</li>
+        </ul>
+
+        <h2>Version 1.0.0 <span class="date">— April 14, 2026</span></h2>
+        <p><span class="version">Initial Release</span></p>
+        <ul>
+            <li>Four default deity modules: Chenrezig, Green Tara, Guru Rinpoche, and Manjushri</li>
+            <li>Complete Tibetan liturgy with phonetic and English translations</li>
+            <li>Custom module creation with unlimited stages</li>
+            <li>Mantra counter with lifetime and session tracking</li>
+            <li>Integrated practice journal</li>
+            <li>Tibetan Buddhist calendar with special observance days (2025-2049)</li>
+            <li>Audio player with repeat functionality</li>
+            <li>PDF viewer and text editor</li>
+            <li>Fullscreen image and text viewing</li>
+            <li>Dark theme interface with gold accents</li>
+            <li>Keyboard shortcuts for efficient navigation</li>
+            <li>Cross-platform support (Linux Flatpak, Windows, macOS)</li>
+        </ul>
+
+        <div class="note">
+            💡 <b>Note:</b> Default deity modules from version 1.0.0 are temporarily disabled in version 1.1.0.
+            They may be restored in a future update. In the meantime, use the <b>"+ Create Custom Module"</b>
+            button to build practices that match your own tradition or needs.
+        </div>
+    )").arg(Constants::appDirPath);
+
+    textBrowser->setHtml(html);
+    layout->addWidget(textBrowser);
+
+    // Close button
+    QPushButton* closeButton = new QPushButton("Close", dialog);
+    closeButton->setFixedHeight(32);
+    closeButton->setFixedWidth(100);
+    closeButton->setStyleSheet(R"(
+        QPushButton {
+            background-color: #3a6ea5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        QPushButton:hover {
+            background-color: #4a7eb5;
+        }
+    )");
+    connect(closeButton, &QPushButton::clicked, dialog, &QDialog::accept);
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(closeButton);
+    buttonLayout->addStretch();
+    layout->addLayout(buttonLayout);
+
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->exec();
 }

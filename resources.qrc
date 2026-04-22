@@ -1,9 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>io.github.alamahant.Sadhana.png</file>
-        <file>modules/chenrezig.json</file>
-        <file>modules/guru.json</file>
-        <file>modules/manjushri.json</file>
-        <file>modules/tara.json</file>
+        <file>modules/example.json</file>
     </qresource>
 </RCC>

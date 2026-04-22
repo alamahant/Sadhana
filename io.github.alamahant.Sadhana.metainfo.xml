@@ -129,6 +129,19 @@
   </screenshots>
 
   <releases>
+
+    <release version="1.0.1" date="2026-04-24">
+      <description>
+        <p>Tradition-agnostic update:</p>
+        <ul>
+          <li>Temporarily disabled default deity modules (Chenrezig, Green Tara, Guru Rinpoche, Manjushri) to make the application tradition-agnostic out of the box</li>
+          <li>Added instructional example module teaching users how to use Sadhana without assuming any specific religious tradition</li>
+          <li>Default modules may be restored in a future update based on user feedback</li>
+          <li>Sadhana now launches as a neutral practice tracking tool — users are encouraged to create their own custom modules that fit their personal needs</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="1.0.0" date="2026-04-14">
       <description>
         <p>Initial release of Sadhana:</p>

@@ -1021,6 +1021,7 @@ void PujaView::loadStage(int index)
         } else if (index == 2) {
             // Main practice
             m_textArea->setText("");
+
             m_mantraLabel->setText(m_currentModule->mantraText());
             m_mantraLabel->setVisible(true);
             mantraLabelCpanel->setText("Mantra: " + m_currentModule->mantraText());

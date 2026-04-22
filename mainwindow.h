@@ -37,6 +37,7 @@ private slots:
     void showInstructionsDialog();
     void showRespectDialog();
     void showFindResourcesDialog();
+    void showChangelogDialog();
 
 private:
     void setupUI();
