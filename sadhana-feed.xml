@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Sadhana - Teachings & Events</title>
+    <link>https://jnanadhakini.github.io/sadhana/</link>
+    <description>Spiritual teachings, podcast episodes, and live event announcements</description>
+    <language>en</language>
+
+    <item>
+      <title>Welcome to Sadhana</title>
+      <description>This is your first RSS notification. You will receive updates about new teachings, live sessions, and podcast episodes here.</description>
+      <link>https://jnanadhakini.gumroad.com/l/sadhana</link>
+      <pubDate>Fri, 01 May 2026 12:00:00 GMT</pubDate>
+    </item>
+
+  </channel>
+</rss>
