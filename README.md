@@ -8,8 +8,12 @@ Sadhana is a cross-platform desktop application designed to support and enhance 
 
 > **Note:** Although made with Tibetan Buddhism in mind and intent, Sadhana can be used for any puja or sadhana practice, including Hindu, Chinese, or Christian contemplative traditions. The custom module system allows you to create practice sequences for any spiritual path.
 
-Available in Flathub:
-https://flathub.org/en/apps/search?q=alamahant
+**Download**
+ 
+| Platform | Where to Get It |
+| :--- | :--- |
+| **Linux** | [Flathub](https://flathub.org/en/apps/search?q=alamahant) |
+| **Windows and Mac** | [Buy on Gumroad](https://jnanadhakini.gumroad.com/) - Pre-compiled binary, no compilation needed |
 
 ---
 
