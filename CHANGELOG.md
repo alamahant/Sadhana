@@ -1,8 +1,28 @@
 # Changelog
 
-All notable changes to Sadhana will be documented in this file.
+## [1.0.2] — 2026-07-04
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+### New Features
+- **Module Export/Import**: Share custom modules with peers!
+  - Export: Right-click any custom module → "Export Module"
+  - Creates self-contained folder with all media files
+  - Import: Place exported folder in `imported_modules/` and restart
+  - Auto-loads modules from `imported_modules/` on startup
+
+- **RSS Feed Notifications**: Stay updated with new teachings and events!
+  - RSS button on toolbar with red highlight for new content
+  - Card-based view with Previous/Next navigation
+  - Mark items as read/unread
+  - Persistent read status between sessions
+  - Enable/disable RSS feed
+  - Manual refresh option
+
+### Technical Improvements
+- Added `exported_modules/` and `imported_modules/` directories
+- Module paths now use filenames relative to JSON location for portability
+- Auto-detection of imported modules on application startup
+- RSS feed parsing with QXmlStreamReader
+- Persistent settings with QSettings
 
 ---
 

@@ -30,6 +30,8 @@ public:
     void loadModule(DeityModule* module);
 protected:
         void keyPressEvent(QKeyEvent* event) override;
+        bool eventFilter(QObject* obj, QEvent* event) override;
+
 signals:
     void backToGrid();
 
@@ -120,6 +122,8 @@ private:
 
 public:
     void loadCustomModule(CustomModule* module);
+    JournalDialog *getJournalDialog() const;
+
 private:
     QTextEdit* m_liturgyEdit;
     QTextEdit* m_mantraEdit;
@@ -155,6 +159,15 @@ private:
     QPushButton* m_infoButton;
     bool hasMantra = false;
     bool hasImage = false;
+
+    // Image hover zoom
+    QLabel* m_zoomPopup = nullptr;
+    QPixmap m_originalImagePixmap;
+private slots:
+    void showZoomedImage(const QPixmap &pixmap);
+    void hideZoomedImage();
+
+
 };
 
 #endif // PUJAVIEW_H

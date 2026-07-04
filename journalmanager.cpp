@@ -108,3 +108,13 @@ void JournalManager::addEntry(const JournalEntry& entry)
     m_entries.append(entry);
     save();
 }
+
+void JournalManager::deleteEntriesForDate(const QDate& date)
+{
+    for (int i = m_entries.size() - 1; i >= 0; --i) {
+        if (m_entries[i].timestamp.date() == date) {
+            m_entries.removeAt(i);
+        }
+    }
+    save();
+}

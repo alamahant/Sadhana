@@ -13,6 +13,8 @@ namespace Constants {
     extern const QString journalPath;
     extern const QString filesPath;
     extern const QString defaultModuleDataPath;
+    extern const QString exportedModulesPath;
+    extern const QString importedModulesPath;
 };
 
 

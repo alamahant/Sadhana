@@ -16,6 +16,7 @@ const QString customModulesPath = appDirPath + "/CustomModules";
 const QString filesPath = appDirPath + "/files";
 const QString journalPath = appDirPath + "/journal";
 const QString defaultModuleDataPath = appDirPath + "/DefaultModules";
-
+const QString exportedModulesPath = appDirPath + "/exported_modules";
+const QString importedModulesPath = appDirPath + "/imported_modules";
 }
 

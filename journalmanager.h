@@ -25,7 +25,10 @@ public:
     QVector<JournalEntry> getEntries() const;
     QVector<JournalEntry> getEntriesForDate(const QDate& date) const;
     void clearAll();
+
+    void deleteEntriesForDate(const QDate& date);
     void addEntry(const JournalEntry& entry);
+
 private:
     JournalManager(QObject* parent = nullptr);
     void load();

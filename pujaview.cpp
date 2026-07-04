@@ -13,6 +13,10 @@
 #include<QPdfDocument>
 #include"journalmanager.h"
 #include"constants.h"
+#include<QApplication>
+#include <QCursor>
+#include <QScreen>
+
 
 PujaView::PujaView(QWidget *parent)
     : QWidget(parent)
@@ -116,6 +120,8 @@ void PujaView::setupUI()
 
     // ========== DEITY IMAGE ==========
     m_imageLabel = new QLabel(this);
+    m_imageLabel->setMouseTracking(true);  // Enable mouse tracking
+    m_imageLabel->installEventFilter(this); // Install event filt
     m_imageLabel->setFixedSize(280, 280);
     m_imageLabel->setAlignment(Qt::AlignCenter);
     m_imageLabel->setStyleSheet("border: 2px solid #333; border-radius: 12px; background-color: #111;");
@@ -190,6 +196,11 @@ void PujaView::setupUI()
     setupControlPanel();
     mainLayout->addWidget(m_controlPanel);
     onSectionClicked(0);
+
+    m_zoomPopup = new QLabel(nullptr, Qt::ToolTip | Qt::FramelessWindowHint);
+    m_zoomPopup->setStyleSheet("border: 2px solid #ffd700; border-radius: 8px; background: #1a1a1a; padding: 4px;");
+    m_zoomPopup->setAlignment(Qt::AlignCenter);
+    m_zoomPopup->hide();
 }
 
 void PujaView::setupControlPanel()
@@ -594,7 +605,7 @@ void PujaView::updateTextArea()
     m_textArea->setText(text);
 }
 
-
+/*
 void PujaView::updateImageDisplay()
 {
     if (!m_currentModule) return;
@@ -607,6 +618,27 @@ void PujaView::updateImageDisplay()
                                        Qt::SmoothTransformation);
         m_imageLabel->setPixmap(scaled);
     } else {
+        m_imageLabel->setText("Image not found");
+    }
+}
+*/
+
+void PujaView::updateImageDisplay()
+{
+    if (!m_currentModule) return;
+
+    QPixmap pixmap(m_currentModule->effectiveImagePath());
+    if (!pixmap.isNull()) {
+        // Store original for hover zoom
+        m_originalImagePixmap = pixmap;
+
+        // Scale to fit 280x280 while preserving aspect ratio
+        QPixmap scaled = pixmap.scaled(280, 280,
+                                       Qt::KeepAspectRatio,
+                                       Qt::SmoothTransformation);
+        m_imageLabel->setPixmap(scaled);
+    } else {
+        m_originalImagePixmap = QPixmap();
         m_imageLabel->setText("Image not found");
     }
 }
@@ -1096,6 +1128,10 @@ void PujaView::loadStage(int index)
         QPixmap pixmap(stage.imagePath);
         if (!pixmap.isNull()) {
             hasImage = true;
+
+            // Store original for hover zoom
+            m_originalImagePixmap = pixmap;
+
             QPixmap scaled = pixmap.scaled(280, 280,
                     Qt::KeepAspectRatio,
                     Qt::SmoothTransformation);
@@ -1103,10 +1139,12 @@ void PujaView::loadStage(int index)
             m_imageLabel->setVisible(true);
         } else {
             hasImage = false;
+            m_originalImagePixmap = QPixmap();
             m_imageLabel->setVisible(false);
         }
     } else {
         hasImage = false;
+        m_originalImagePixmap = QPixmap();
         m_imageLabel->setVisible(false);
     }
     // Load mantra
@@ -1639,6 +1677,11 @@ void PujaView::onResetCounter()
     }
 }
 
+JournalDialog *PujaView::getJournalDialog() const
+{
+    return journalDialog;
+}
+
 void PujaView::onStageNameChanged()
 {
     if (!m_isCustomModule || m_currentStageIndex < 0) return;
@@ -1662,3 +1705,65 @@ QString PujaView::getCurrentModuleName()
     }
     return "General";
 }
+
+// image hover
+bool PujaView::eventFilter(QObject* obj, QEvent* event)
+{
+    if (obj == m_imageLabel) {
+        if (event->type() == QEvent::Enter) {
+            // Mouse entered the image label - show zoomed image
+            if (!m_originalImagePixmap.isNull()) {
+                showZoomedImage(m_originalImagePixmap);
+            }
+            return true;
+        }
+        else if (event->type() == QEvent::Leave) {
+            // Mouse left the image label - hide zoom
+            hideZoomedImage();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
+void PujaView::showZoomedImage(const QPixmap &pixmap)
+{
+    if (pixmap.isNull()) return;
+
+    // Show original size (no scaling)
+    QPixmap original = pixmap;
+
+    // Limit size to fit screen (70% of screen)
+    QSize maxSize = QApplication::primaryScreen()->availableSize() * 0.7;
+    if (original.width() > maxSize.width() || original.height() > maxSize.height()) {
+        original = original.scaled(maxSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
+    m_zoomPopup->setPixmap(original);
+    m_zoomPopup->adjustSize();
+    m_zoomPopup->setStyleSheet("border: 2px solid #ffd700; border-radius: 8px; background: #1a1a1a; padding: 4px;");
+
+    // Position near cursor
+    QPoint pos = QCursor::pos() + QPoint(15, 15);
+
+    // Keep popup on screen
+    QRect screen = QApplication::primaryScreen()->availableGeometry();
+    if (pos.x() + m_zoomPopup->width() > screen.right()) {
+        pos.setX(screen.right() - m_zoomPopup->width() - 5);
+    }
+    if (pos.y() + m_zoomPopup->height() > screen.bottom()) {
+        pos.setY(screen.bottom() - m_zoomPopup->height() - 5);
+    }
+
+    m_zoomPopup->move(pos);
+    m_zoomPopup->show();
+    m_zoomPopup->raise();
+}
+
+void PujaView::hideZoomedImage()
+{
+    if (m_zoomPopup) {
+        m_zoomPopup->hide();
+    }
+}
+

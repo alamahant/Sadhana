@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setApplicationName("Sadhana");
     QCoreApplication::setOrganizationName("Alamahant");
-    QCoreApplication::setApplicationVersion("1.0.1");
+    QCoreApplication::setApplicationVersion("1.0.2");
 
 
     QDir().mkpath(Constants::appDirPath);
@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
     QDir().mkpath(Constants::filesPath);
     QDir().mkpath(Constants::journalPath);
     QDir().mkpath(Constants::defaultModuleDataPath);
+    QDir().mkpath(Constants::exportedModulesPath);
+    QDir().mkpath(Constants::importedModulesPath);
 
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon(":/io.github.alamahant.Sadhana.png"));

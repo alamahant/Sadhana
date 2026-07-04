@@ -60,13 +60,24 @@ private:
 private:
     QVector<CustomModule*> m_customModules; // User-created modules
     void loadCustomModules();
+    // Load modules from imported_modules/
+    void loadImportedModules();
+
+    // Helper to resolve paths relative to imported folder
+    QString resolvePathRelativeToFolder(const QString& relativePath, const QString& folderPath);
+
+    // Helper to get file type subdirectory
+    QString getFileTypeSubdir(const QString& filePath);
+    CustomModule* loadCustomModuleFromImportedFolder(const QString& jsonPath);
+
 public:
     QVector<CustomModule*> getAllCustomModules() const { return m_customModules; };
     QString getCustomModulesPath() const;
     CustomModule* getCustomModuleById(const QString& id) const;
     void deleteCustomModule(const QString& id);
     DeityModule* loadModuleFromJson(const QString& jsonPath);
-
+    // Export module to exported_modules/
+    bool exportModule(const QString& moduleId);
 };
 
 #endif // MODULEMANAGER_H

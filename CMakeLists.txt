@@ -13,7 +13,7 @@ if(FLATPAK_BUILD)
     message(STATUS "Building for Flatpak")
 endif()
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Multimedia PdfWidgets)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Multimedia PdfWidgets Network)
 
 qt_add_executable(Sadhana
     MANUAL_FINALIZATION
@@ -36,6 +36,8 @@ qt_add_executable(Sadhana
     constants.cpp constants.h
     resources.qrc
     donationdialog.cpp donationdialog.h
+    rssnotificationdialog.cpp rssnotificationdialog.h
+    journalcalendar.cpp journalcalendar.h
 )
 
 target_link_libraries(Sadhana
@@ -44,6 +46,7 @@ target_link_libraries(Sadhana
         Qt::Widgets
         Qt::Multimedia
         Qt::PdfWidgets
+        Qt::Network
 )
 
 

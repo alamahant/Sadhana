@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , readerDialog(new ReaderDialog(this))
     , calendarDialog(new TibetanCalendarDialog(this))
+    , rssDialog(new RssNotificationDialog(this))
 {
     setupUI();
     setupMenuBar();
@@ -38,6 +39,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_gridView, &GridView::deleteModuleRequested,
                 this, &MainWindow::onDeleteModule);
 
+    connect(m_gridView, &GridView::rssFeedRequested,
+            this, &MainWindow::onRssFeedRequested);
+
 #ifdef FLATPAK_BUILD
     QString jsonPath = QCoreApplication::applicationDirPath() + "/files/tibetan_special_days.json";
 #else
@@ -46,6 +50,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     calendarDialog->loadCalendarData(jsonPath);
 
+    rssDialog->checkForUpdates();
+    connect(rssDialog, &RssNotificationDialog::newContentAvailable,
+            m_gridView, &GridView::setRssButtonHighlight);
+
+    connect(m_gridView, &GridView::exportModuleRequested,
+                this, &MainWindow::onExportModule);
 }
 
 MainWindow::~MainWindow()
@@ -100,6 +110,76 @@ void MainWindow::setupMenuBar()
     fileMenu->addSeparator();
 
 
+    QAction *importModuleAction = fileMenu->addAction("Import Module");
+    connect(importModuleAction, &QAction::triggered, this, [this]{
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Import Module");
+        msgBox.setTextFormat(Qt::RichText);
+        msgBox.setText(
+            QString(
+                "<b>How to import a module:</b><br><br>"
+                "1. If the module is archived (ZIP, TAR, etc.), extract it first<br>"
+                "   using your preferred archive manager (File Roller, Ark, etc.)<br><br>"
+                "2. Place the extracted folder into:<br>"
+                "   <b>%1</b><br><br>"
+                "3. Restart the application<br>"
+                "   The module will appear in the grid automatically!<br><br>"
+                "<i>Note: The folder should contain a .json file and all media files</i>"
+            ).arg(Constants::importedModulesPath)
+        );
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+
+        // After OK, ask if they want to open the folder
+        QMessageBox::StandardButton reply = QMessageBox::question(
+            this,
+            "Open Folder",
+            "Do you want to open the imported modules folder?",
+            QMessageBox::Yes | QMessageBox::No
+        );
+        if (reply == QMessageBox::Yes) {
+            QDesktopServices::openUrl(QUrl::fromLocalFile(Constants::importedModulesPath));
+        }
+    });
+    fileMenu->addSeparator();
+
+    QAction *exportModuleAction = fileMenu->addAction("Export Module");
+    connect(exportModuleAction, &QAction::triggered, this, [this]{
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Export Module");
+        msgBox.setTextFormat(Qt::RichText);
+        msgBox.setText(
+            QString(
+                "<b>How to export a module:</b><br><br>"
+                "1. Right-click on any custom module in the grid<br><br>"
+                "2. Select <b>'Export Module'</b> from the context menu<br><br>"
+                "3. The module will be exported to:<br>"
+                "   <b>%1</b><br><br>"
+                "<b>To share with a peer:</b><br>"
+                "• Archive (ZIP/TAR) the exported folder<br>"
+                "• Send the archive to your peer<br><br>"
+                "<i>Your peer can then import it using the Import Module action</i>"
+            ).arg(Constants::exportedModulesPath)
+        );
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+
+        // After OK, ask if they want to open the folder
+        QMessageBox::StandardButton reply = QMessageBox::question(
+            this,
+            "Open Folder",
+            "Do you want to open the exported modules folder?",
+            QMessageBox::Yes | QMessageBox::No
+        );
+        if (reply == QMessageBox::Yes) {
+            QDesktopServices::openUrl(QUrl::fromLocalFile(Constants::exportedModulesPath));
+        }
+    });
+    fileMenu->addSeparator();
+
+
     QAction* exitAction = fileMenu->addAction("E&xit");
     exitAction->setShortcut(QKeySequence::Quit);
     connect(exitAction, &QAction::triggered, this, &QWidget::close);
@@ -120,6 +200,18 @@ void MainWindow::setupMenuBar()
     QAction* calendarAction = toolsMenu->addAction("&Tibetan Calendar");
     calendarAction->setShortcut(QKeySequence("Ctrl+K"));
     connect(calendarAction, &QAction::triggered, this, &MainWindow::showTibetanCalendar);
+
+
+    QAction* journalAction = toolsMenu->addAction("&Open Journal");
+    journalAction->setShortcut(QKeySequence("Ctrl+J"));
+    connect(journalAction, &QAction::triggered, this, [this]{
+        if(m_pujaView) {
+            if(m_pujaView->getJournalDialog()){
+            m_pujaView->getJournalDialog()->show();
+            m_pujaView->getJournalDialog()->raise();
+            }
+        }
+    });
 
     // Help menu
     QMenu* helpMenu = menuBar()->addMenu("&Help");
@@ -534,15 +626,13 @@ void MainWindow::createSymlink()
 }
 
 
-
-
 void MainWindow::showAboutDialog()
 {
     QString version = QCoreApplication::applicationVersion();
 
     QDialog* dialog = new QDialog(this);
     dialog->setWindowTitle("About Sadhana");
-    dialog->setFixedSize(500, 350);
+    dialog->setFixedSize(500, 480);  // Increased height to accommodate new links
     dialog->setStyleSheet("QDialog { background-color: #1a1a1a; }");
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -564,16 +654,33 @@ void MainWindow::showAboutDialog()
     headerLayout->addStretch();
     mainLayout->addLayout(headerLayout);
 
-    // Content with word wrap enabled
+    // Content with word wrap and CLICKABLE LINKS
     QLabel* contentLabel = new QLabel(dialog);
     contentLabel->setWordWrap(true);
     contentLabel->setAlignment(Qt::AlignCenter);
     contentLabel->setStyleSheet("color: #ffffff; font-size: 14px; line-height: 1.6;");
+    contentLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);  // ← ENABLES CLICKABLE LINKS
+    contentLabel->setOpenExternalLinks(true);                           // ← OPENS LINKS IN BROWSER
+
     contentLabel->setText(QString(
         "<p><b>Version %1</b></p>"
         "<p style='margin-top: 20px;'>A digital shrine and practice tracker for spiritual practitioners. Designed to support daily sadhana, mantra accumulation, and contemplative practice.</p>"
-        "<p style='margin-top: 30px; color: #aaaaaa;'>© 2026 Alamahant<br>All rights reserved.</p>"
-        "<p style='margin-top: 20px; font-style: italic; color: #ffd700;'>\"By this merit, may all beings attain enlightenment.\"</p>"
+
+        "<p style='margin-top: 25px;'><strong style='color: #27ae60;'>✓ Free for Linux on Flathub</strong></p>"
+
+        "<p><strong>All Windows/macOS apps:</strong><br>"
+        "<a href='https://jnanadhakini.gumroad.com' style='color: #ffd700;'>"
+        "→ https://jnanadhakini.gumroad.com</a></p>"
+
+        "<p><strong>Source Code:</strong><br>"
+        "<a href='https://github.com/alamahant/Sadhana' style='color: #ffd700;'>"
+        "→ https://github.com/alamahant/Sadhana</a></p>"
+
+        "<p style='margin-top: 30px; color: #aaaaaa;'>© 2025 Alamahant<br>"
+        "Open source (GPL-3.0). Linux version free on Flathub.</p>"
+
+        "<p style='margin-top: 20px; font-style: italic; color: #ffd700;'>"
+        "\"By this merit, may all beings attain enlightenment.\"</p>"
     ).arg(version));
 
     mainLayout->addWidget(contentLabel);
@@ -604,6 +711,7 @@ void MainWindow::showAboutDialog()
 
     dialog->exec();
 }
+
 
 void MainWindow::showInstructionsDialog()
 {
@@ -1000,6 +1108,37 @@ void MainWindow::showChangelogDialog()
         <h1>📋 Changelog</h1>
         <p>All notable changes to Sadhana are documented here.</p>
 
+
+<h2>Version 1.0.2 <span class="date">— July 4, 2026</span></h2>
+<p><span class="version">Module Sharing & RSS Feed</span></p>
+<ul>
+    <li><b>Module Export/Import:</b> Share custom modules with peers!
+        <ul>
+            <li>Export: Right-click any custom module → "Export Module"</li>
+            <li>Creates self-contained folder with all media files</li>
+            <li>Import: Place exported folder in <code>imported_modules/</code> and restart</li>
+            <li>Auto-loads modules from <code>imported_modules/</code> on startup</li>
+        </ul>
+    </li>
+    <li><b>RSS Feed Notifications:</b> Stay updated with new teachings and events!
+        <ul>
+            <li>RSS button on toolbar with red highlight for new content</li>
+            <li>Card-based view with Previous/Next navigation</li>
+            <li>Mark items as read/unread with persistent status</li>
+            <li>Enable/disable RSS feed with manual refresh option</li>
+        </ul>
+    </li>
+    <li><b>Technical Improvements:</b>
+        <ul>
+            <li>Added <code>exported_modules/</code> and <code>imported_modules/</code> directories</li>
+            <li>Module paths now use filenames relative to JSON location for portability</li>
+            <li>Auto-detection of imported modules on application startup</li>
+            <li>RSS feed parsing with QXmlStreamReader</li>
+            <li>Persistent settings with QSettings</li>
+        </ul>
+    </li>
+</ul>
+
         <h2>Version 1.0.1 <span class="date">— April 24, 2026</span></h2>
         <p><span class="version">Tradition-Agnostic Update</span></p>
         <ul>
@@ -1061,4 +1200,50 @@ void MainWindow::showChangelogDialog()
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->exec();
+}
+
+
+//////// RSS
+void MainWindow::onRssFeedRequested()
+{
+    if(rssDialog) {
+        rssDialog->show();
+    }
+}
+
+
+void MainWindow::onExportModule(DeityModule* module)
+{
+    if (!module) return;
+
+    // Check if it's a custom module
+    CustomModule* custom = ModuleManager::instance().getCustomModuleById(module->id());
+    if (!custom) {
+        QMessageBox::warning(this, "Export Module",
+            "Only custom modules can be exported.");
+        return;
+    }
+
+    // Export the module
+    bool success = ModuleManager::instance().exportModule(module->id());
+
+    if (success) {
+        QMessageBox::information(this, "Export Complete",
+            QString(
+                "Module exported to:\n%1\n\n"
+                "To share with a peer:\n"
+                "• Archive (ZIP/TAR) the folder above\n"
+                "• Send the archive to your peer\n\n"
+                "They should:\n"
+                "• Extract the archive to:\n"
+                "  Sadhana's 'imported_modules' folder\n"
+                "• Restart the application\n\n"
+                "The module will appear in their grid automatically!"
+            ).arg(Constants::exportedModulesPath + "/" + module->name().replace(" ", "_"))
+             .arg(Constants::importedModulesPath)
+        );
+    } else {
+        QMessageBox::warning(this, "Export Failed",
+            "Failed to export module. Please check if all files exist or if module is already exported.");
+    }
 }

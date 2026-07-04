@@ -10,6 +10,8 @@
 #include <QDateTime>
 #include<QHeaderView>
 #include<QTableView>
+#include<QSplitter>
+#include<QMessageBox>
 
 JournalDialog::JournalDialog(QWidget* parent)
     : QDialog(parent)
@@ -18,68 +20,103 @@ JournalDialog::JournalDialog(QWidget* parent)
     refreshForDate(QDate::currentDate());
 }
 
+
+
 void JournalDialog::setupUI()
 {
     setWindowTitle("Journal");
-    setMinimumSize(800, 600);
-    
+    setMinimumSize(800, 800);
+
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
-    
-    // Top: Calendar
-    m_calendar = new QCalendarWidget(this);
+
+    // ========== QSplitter for resizable sections ==========
+    QSplitter* splitter = new QSplitter(Qt::Vertical, this);
+
+    splitter->setStyleSheet(
+        "QSplitter::handle {"
+        "   background-color: #ffd700;"
+        "   height: 3px;"
+        "}"
+    );
+    // Top section: Calendar
+    m_calendar = new JournalCalendar(this);
     m_calendar->setObjectName("tibetanCalendar");
     m_calendar->setGridVisible(true);
     m_calendar->setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
-
     m_calendar->setStyleSheet(
         "QCalendarWidget QAbstractItemView {"
         "   color: #666666;"
         "}"
-
     );
-
     connect(m_calendar, &QCalendarWidget::selectionChanged, this, [this]() {
         onDateSelected(m_calendar->selectedDate());
     });
-    mainLayout->addWidget(m_calendar);
-    
-    // Middle: Entries display
+
+    // Create a widget to hold calendar with proper sizing
+    QWidget* calendarContainer = new QWidget(this);
+    QVBoxLayout* calendarLayout = new QVBoxLayout(calendarContainer);
+    calendarLayout->setContentsMargins(0, 0, 0, 0);
+    calendarLayout->addWidget(m_calendar);
+    splitter->addWidget(calendarContainer);
+
+    // Bottom section: Entries display + Add entry
+    QWidget* entriesContainer = new QWidget(this);
+    QVBoxLayout* entriesLayout = new QVBoxLayout(entriesContainer);
+    entriesLayout->setContentsMargins(0, 0, 0, 0);
+
+    // Past Entries label
     QLabel* entriesLabel = new QLabel("Past Entries:", this);
     entriesLabel->setStyleSheet("color: #ffd700; font-weight: bold; margin-top: 10px;");
-    mainLayout->addWidget(entriesLabel);
-    
+    entriesLayout->addWidget(entriesLabel);
+
+    // Entries display
     m_entriesDisplay = new QTextBrowser(this);
-    m_entriesDisplay->setMinimumHeight(200);
+    m_entriesDisplay->setMinimumHeight(150);
     m_entriesDisplay->setStyleSheet("QTextBrowser { background-color: #111; color: #ccc; border: 1px solid #333; border-radius: 4px; padding: 10px; }");
-    mainLayout->addWidget(m_entriesDisplay);
-    
-    // Bottom: Add new entry
+    entriesLayout->addWidget(m_entriesDisplay);
+
+    // Add entry section
     QLabel* newEntryLabel = new QLabel("Add Entry for Selected Date:", this);
     newEntryLabel->setStyleSheet("color: #ffd700; font-weight: bold; margin-top: 10px;");
-    mainLayout->addWidget(newEntryLabel);
-    
+    entriesLayout->addWidget(newEntryLabel);
+
     m_notesEdit = new QTextEdit(this);
     m_notesEdit->setMaximumHeight(100);
     m_notesEdit->setPlaceholderText("Write your journal notes here...");
     m_notesEdit->setStyleSheet("QTextEdit { background-color: #111; color: #ccc; border: 1px solid #333; border-radius: 4px; padding: 8px; }");
-    mainLayout->addWidget(m_notesEdit);
-    
+    entriesLayout->addWidget(m_notesEdit);
+
+    // Buttons
     QHBoxLayout* buttonLayout = new QHBoxLayout();
     m_saveButton = new QPushButton("Save Entry", this);
     m_saveButton->setFixedHeight(32);
     m_saveButton->setStyleSheet("QPushButton { background-color: #3a6ea5; border-radius: 4px; }");
     connect(m_saveButton, &QPushButton::clicked, this, &JournalDialog::onSaveEntry);
-    
+
+
+    m_deleteButton = new QPushButton("Delete Entry", this);
+    m_deleteButton->setFixedHeight(32);
+    m_deleteButton->setStyleSheet("QPushButton { background-color: #3a6ea5; border-radius: 4px; }");
+    connect(m_deleteButton, &QPushButton::clicked, this, &JournalDialog::onDeleteEntry);
+
     m_closeButton = new QPushButton("Close", this);
     m_closeButton->setFixedHeight(32);
     m_closeButton->setStyleSheet("QPushButton { background-color: #3a3a3a; border-radius: 4px; }");
     connect(m_closeButton, &QPushButton::clicked, this, &QDialog::accept);
-    
+
     buttonLayout->addWidget(m_saveButton);
+    buttonLayout->addWidget(m_deleteButton);
     buttonLayout->addWidget(m_closeButton);
     buttonLayout->addStretch();
-    mainLayout->addLayout(buttonLayout);
-    
+    entriesLayout->addLayout(buttonLayout);
+
+    splitter->addWidget(entriesContainer);
+
+    // Set initial sizes (50% each, or adjust as needed)
+    splitter->setSizes(QList<int>() << 400 << 400);
+
+    mainLayout->addWidget(splitter);
+
     setStyleSheet("QDialog { background-color: #1a1a1a; } QLabel { color: #ccc; }");
 }
 
@@ -93,6 +130,7 @@ void JournalDialog::refreshForDate(const QDate& date)
     m_currentDate = date;
     loadEntriesForDate(date);
     m_notesEdit->clear();
+    updateCalendarIndicators();
 }
 
 void JournalDialog::loadEntriesForDate(const QDate& date)
@@ -147,4 +185,39 @@ void JournalDialog::onSaveEntry()
     
     JournalManager::instance().addEntry(entry);
     refreshForDate(m_currentDate);
+}
+
+void JournalDialog::updateCalendarIndicators()
+{
+    // Get all dates that have entries
+    QVector<JournalEntry> allEntries = JournalManager::instance().getEntries();
+    QSet<QDate> datesWithEntries;
+
+    for (const JournalEntry& entry : allEntries) {
+        datesWithEntries.insert(entry.timestamp.date());
+    }
+
+    m_calendar->setDatesWithEntries(datesWithEntries);
+}
+
+void JournalDialog::onDeleteEntry()
+{
+    QVector<JournalEntry> entries = JournalManager::instance().getEntriesForDate(m_currentDate);
+
+    if (entries.isEmpty()) {
+        return;
+    }
+
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this,
+        "Delete Entry",
+        "Delete all journal entries for " + m_currentDate.toString("yyyy-MM-dd") + "?",
+        QMessageBox::Yes | QMessageBox::No
+    );
+
+    if (reply == QMessageBox::Yes) {
+        JournalManager::instance().deleteEntriesForDate(m_currentDate);
+        refreshForDate(m_currentDate);
+        updateCalendarIndicators();
+    }
 }

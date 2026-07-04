@@ -27,6 +27,7 @@ void ModuleManager::loadModules()
 {
     createDefaultModules();
     loadCustomModules();
+    loadImportedModules();
     loadUserData();
 }
 
@@ -435,4 +436,238 @@ QVector<DeityModule*> ModuleManager::getAllModules() const
     }
 
     return all;
+}
+
+
+void ModuleManager::loadImportedModules()
+{
+    QString importPath = Constants::importedModulesPath;
+    QDir dir(importPath);
+
+    if (!dir.exists()) {
+        dir.mkpath(".");
+        return;
+    }
+
+    // Look for directories containing .json files
+    for (const QString& moduleDir : dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        QString dirPath = importPath + "/" + moduleDir;
+        QDir moduleDirObj(dirPath);
+
+        // Find any .json file
+        QStringList jsonFiles = moduleDirObj.entryList({"*.json"}, QDir::Files);
+        for (const QString& jsonFile : jsonFiles) {
+            QString jsonPath = dirPath + "/" + jsonFile;
+
+            CustomModule* module = loadCustomModuleFromImportedFolder(jsonPath);
+            if (module) {
+                // Check if module with this ID already exists
+                bool exists = false;
+                for (CustomModule* existing : m_customModules) {
+                    if (existing->id() == module->id()) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    m_customModules.append(module);
+                    qDebug() << "Loaded imported module:" << module->name() << "from" << jsonPath;
+                } else {
+                    qWarning() << "Module already exists, skipping:" << module->id();
+                    delete module;
+                }
+            }
+        }
+    }
+}
+
+CustomModule* ModuleManager::loadCustomModuleFromImportedFolder(const QString& jsonPath)
+{
+    QFile file(jsonPath);
+    if (!file.open(QIODevice::ReadOnly)) return nullptr;
+
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    QJsonObject json = doc.object();
+    file.close();
+
+    // Get the folder containing the JSON
+    QString baseDir = QFileInfo(jsonPath).absolutePath();
+
+    QString id = json["id"].toString();
+    QString name = json["name"].toString();
+
+    // Generate new ID if needed (avoid conflicts)
+    if (getCustomModuleById(id)) {
+        id = "imported_" + QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
+    }
+
+    CustomModule* module = new CustomModule(id, name);
+    module->setLifetimeCount(json["lifetimeCount"].toInt());
+
+    // Resolve paths relative to baseDir
+    auto resolvePath = [&](const QString& relativePath) -> QString {
+        if (relativePath.isEmpty()) return "";
+        if (QFileInfo(relativePath).isAbsolute()) return relativePath;
+        return QDir(baseDir).filePath(relativePath);
+    };
+
+    module->setUserImagePath(resolvePath(json["userImagePath"].toString()));
+    module->setAudioPath(resolvePath(json["audioPath"].toString()));
+
+    // Load stages
+    QVector<Stage> stages;
+    QJsonArray stagesArray = json["stages"].toArray();
+    for (const QJsonValue& val : stagesArray) {
+        QJsonObject stageObj = val.toObject();
+        Stage stage;
+        stage.name = stageObj["name"].toString();
+        stage.liturgyText = stageObj["liturgyText"].toString();
+        stage.mantraText = stageObj["mantraText"].toString();
+        stage.showImage = stageObj["showImage"].toBool();
+        stage.showMantra = stageObj["showMantra"].toBool();
+        stage.lifetimeCount = stageObj["lifetimeCount"].toInt();
+
+        stage.imagePath = resolvePath(stageObj["imagePath"].toString());
+        stage.audioPath = resolvePath(stageObj["audioPath"].toString());
+        stage.pdfPath = resolvePath(stageObj["pdfPath"].toString());
+
+        stages.append(stage);
+    }
+    module->setStages(stages);
+
+    return module;
+}
+
+bool ModuleManager::exportModule(const QString& moduleId)
+{
+    // Find the module
+    CustomModule* module = getCustomModuleById(moduleId);
+    if (!module) {
+        qWarning() << "Module not found:" << moduleId;
+        return false;
+    }
+
+    // Create export folder with module name
+    QString safeName = module->name();
+    safeName.replace(" ", "_");
+    safeName.replace("/", "_");
+    safeName.replace("\\", "_");
+
+    QString exportDir = Constants::exportedModulesPath + "/" + safeName;
+    QDir dir(exportDir);
+
+    // Check if already exported
+    QString jsonPath = exportDir + "/" + module->id() + ".json";
+    if (dir.exists() && QFile::exists(jsonPath)) {
+        qWarning() << "Module already exported to:" << exportDir;
+
+        // QMessageBox::information(parent, "Export Module",
+        //     "Module already exported to:\n" + exportDir);
+
+        return false;  // Don't overwrite
+    }
+
+    if (!dir.exists()) {
+        dir.mkpath(".");
+    }
+
+    // Collect all unique files from the module
+    QSet<QString> filesToCopy;
+    if (!module->userImagePath().isEmpty() && QFile::exists(module->userImagePath())) {
+        filesToCopy.insert(module->userImagePath());
+    }
+    if (!module->audioPath().isEmpty() && QFile::exists(module->audioPath())) {
+        filesToCopy.insert(module->audioPath());
+    }
+
+    for (const Stage& stage : module->stages()) {
+        if (!stage.imagePath.isEmpty() && QFile::exists(stage.imagePath)) {
+            filesToCopy.insert(stage.imagePath);
+        }
+        if (!stage.audioPath.isEmpty() && QFile::exists(stage.audioPath)) {
+            filesToCopy.insert(stage.audioPath);
+        }
+        if (!stage.pdfPath.isEmpty() && QFile::exists(stage.pdfPath)) {
+            filesToCopy.insert(stage.pdfPath);
+        }
+    }
+
+    // Copy each file to export directory
+    QMap<QString, QString> pathMap; // original → new (just filename)
+
+    for (const QString& sourcePath : filesToCopy) {
+        QFileInfo info(sourcePath);
+        QString fileName = info.fileName();
+
+        // Handle duplicate filenames
+        QString destName = fileName;
+        int counter = 1;
+        while (QFile::exists(exportDir + "/" + destName)) {
+            QFileInfo info2(sourcePath);
+            QString base = info2.baseName();
+            QString suffix = info2.suffix();
+            destName = base + "_" + QString::number(counter) + "." + suffix;
+            counter++;
+        }
+
+        QString destPath = exportDir + "/" + destName;
+        if (QFile::copy(sourcePath, destPath)) {
+            pathMap[sourcePath] = destName;
+            qDebug() << "Copied:" << sourcePath << "→" << destName;
+        } else {
+            qWarning() << "Failed to copy:" << sourcePath;
+        }
+    }
+
+    // Create JSON with just filenames as paths
+    QJsonObject json;
+    json["id"] = module->id();
+    json["name"] = module->name();
+    json["lifetimeCount"] = module->lifetimeCount();
+
+    // Convert paths to just filenames
+    auto getFileName = [&](const QString& path) -> QString {
+        if (path.isEmpty()) return "";
+        if (pathMap.contains(path)) {
+            return pathMap[path];
+        }
+        return QFileInfo(path).fileName();
+    };
+
+    json["userImagePath"] = getFileName(module->userImagePath());
+    json["audioPath"] = getFileName(module->audioPath());
+
+    // Stages
+    QJsonArray stagesArray;
+    for (const Stage& stage : module->stages()) {
+        QJsonObject stageObj;
+        stageObj["name"] = stage.name;
+        stageObj["liturgyText"] = stage.liturgyText;
+        stageObj["mantraText"] = stage.mantraText;
+        stageObj["showImage"] = stage.showImage;
+        stageObj["showMantra"] = stage.showMantra;
+        stageObj["lifetimeCount"] = stage.lifetimeCount;
+
+        stageObj["imagePath"] = getFileName(stage.imagePath);
+        stageObj["audioPath"] = getFileName(stage.audioPath);
+        stageObj["pdfPath"] = getFileName(stage.pdfPath);
+
+        stagesArray.append(stageObj);
+    }
+    json["stages"] = stagesArray;
+
+    // Write JSON
+    //QString jsonPath = exportDir + "/" + module->id() + ".json";
+    QFile jsonFile(jsonPath);
+    if (!jsonFile.open(QIODevice::WriteOnly)) {
+        qWarning() << "Could not write JSON to:" << jsonPath;
+        return false;
+    }
+
+    jsonFile.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
+    jsonFile.close();
+
+    qDebug() << "Module exported to:" << exportDir;
+    return true;
 }

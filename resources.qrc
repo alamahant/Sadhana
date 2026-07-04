@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>io.github.alamahant.Sadhana.png</file>
         <file>modules/example.json</file>
+        <file>icons-white/rss.svg</file>
     </qresource>
 </RCC>

@@ -23,6 +23,8 @@ signals:
     void moduleSelected(DeityModule* module);
     void createCustomModuleRequested();
     void deleteModuleRequested(DeityModule* module);
+    void rssFeedRequested();
+    void exportModuleRequested(DeityModule* module);
 private:
     QGridLayout* m_gridLayout;
     QWidget* m_gridContainer;
@@ -33,6 +35,9 @@ private:
     QVector<DeityModule*> m_modules;
     void addContextMenu(ModuleSquare* square, DeityModule* module);
     QPushButton* m_createButton;
+    QPushButton* rssButton;
+public slots:
+    void setRssButtonHighlight(bool hasNew);
 
 };
 

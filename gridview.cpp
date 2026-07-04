@@ -24,10 +24,17 @@ GridView::GridView(QWidget* parent)
     m_createButton->setStyleSheet("QPushButton { background-color: #3a6ea5; border-radius: 4px; } QPushButton:hover { background-color: #4a7eb5; }");
     connect(m_createButton, &QPushButton::clicked, this, &GridView::createCustomModuleRequested);
 
+    rssButton = new QPushButton(this);
+    rssButton->setIcon(QIcon(":/icons-white/rss.svg"));
+    rssButton->setFixedHeight(32);
+    rssButton->setMaximumWidth(32);
 
+    //rssButton->setToolTip("Check for new teachings, podcasts, and events");
+    connect(rssButton, &QPushButton::clicked, this, &GridView::rssFeedRequested);
 
     topBar->addWidget(m_createButton);
-
+    topBar->addSpacing(5);
+    topBar->addWidget(rssButton);
     mainLayout->addLayout(topBar);
 
     m_scrollArea = new QScrollArea(this);
@@ -98,11 +105,17 @@ void GridView::addContextMenu(ModuleSquare* square, DeityModule* module)
     connect(square, &QWidget::customContextMenuRequested, this, [this, module, square](const QPoint& pos) {
         QMenu menu;
         QAction* setGridImageAction = menu.addAction("Change Grid Image");
-
+        QAction* exportAction = menu.addAction("Export Module");
         QAction* deleteAction = menu.addAction("Delete Module");
+
         connect(deleteAction, &QAction::triggered, this, [this, module]() {
             emit deleteModuleRequested(module);
         });
+
+        connect(exportAction, &QAction::triggered, this, [this, module]() {
+            emit exportModuleRequested(module);
+        });
+
         connect(setGridImageAction, &QAction::triggered, this, [this, module]() {
             // Open file dialog to select new grid image
             QString filePath = QFileDialog::getOpenFileName(nullptr,
@@ -122,4 +135,15 @@ void GridView::addContextMenu(ModuleSquare* square, DeityModule* module)
         });
         menu.exec(square->mapToGlobal(pos));
     });
+}
+
+////// RSSFEED
+
+void GridView::setRssButtonHighlight(bool hasNew)
+{
+    if (hasNew) {
+        rssButton->setStyleSheet("QPushButton { background-color: #cc0000; border-radius: 4px; }");
+    } else {
+        rssButton->setStyleSheet("");  // Reset to default
+    }
 }

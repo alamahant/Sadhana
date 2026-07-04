@@ -12,6 +12,7 @@
 #include "deitymodule.h"
 #include "readerdialog.h"
 #include"tibetancalendardialog.h"
+#include"rssnotificationdialog.h"
 
 class MainWindow : public QMainWindow
 {
@@ -38,6 +39,8 @@ private slots:
     void showRespectDialog();
     void showFindResourcesDialog();
     void showChangelogDialog();
+    void onRssFeedRequested();
+    void onExportModule(DeityModule* module);
 
 private:
     void setupUI();
@@ -50,6 +53,8 @@ private:
     void refreshGrid();
     ReaderDialog* readerDialog = nullptr;
     TibetanCalendarDialog* calendarDialog = nullptr;
+    RssNotificationDialog* rssDialog = nullptr;
+
 
 };
 

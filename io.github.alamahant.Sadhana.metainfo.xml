@@ -130,6 +130,41 @@
 
   <releases>
 
+<release version="1.0.2" date="2026-07-04">
+  <description>
+    <p>New features and improvements:</p>
+    <ul>
+      <li>Module Export/Import: Share custom modules with peers!
+        <ul>
+          <li>Export: Right-click any custom module → "Export Module"</li>
+          <li>Creates self-contained folder with all media files</li>
+          <li>Import: Place exported folder in imported_modules/ and restart</li>
+          <li>Auto-loads modules from imported_modules/ on startup</li>
+        </ul>
+      </li>
+      <li>RSS Feed Notifications: Stay updated with new teachings and events!
+        <ul>
+          <li>RSS button on toolbar with red highlight for new content</li>
+          <li>Card-based view with Previous/Next navigation</li>
+          <li>Mark items as read/unread</li>
+          <li>Persistent read status between sessions</li>
+          <li>Enable/disable RSS feed</li>
+          <li>Manual refresh option</li>
+        </ul>
+      </li>
+      <li>Technical Improvements:
+        <ul>
+          <li>Added exported_modules/ and imported_modules/ directories</li>
+          <li>Module paths now use filenames relative to JSON location for portability</li>
+          <li>Auto-detection of imported modules on application startup</li>
+          <li>RSS feed parsing with QXmlStreamReader</li>
+          <li>Persistent settings with QSettings</li>
+        </ul>
+      </li>
+    </ul>
+  </description>
+</release>
+
     <release version="1.0.1" date="2026-04-24">
       <description>
         <p>Tradition-agnostic update:</p>
