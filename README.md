@@ -17,9 +17,9 @@ Sadhana is a cross-platform desktop application designed to support and enhance 
 
 ---
 
-## ✨ Features
+## Features
 
-### 🧘 Deity Practice Modules
+###  Deity Practice Modules
 
 Pre-loaded with four traditional modules following a classical four-stage structure:
 
@@ -36,7 +36,7 @@ Pre-loaded with four traditional modules following a classical four-stage struct
 - Guru Rinpoche (Padmasambhava) — Precious Master of Oddiyana
 - Mañjuśrī — Bodhisattva of Wisdom
 
-### 🛠️ Custom Modules
+###  Custom Modules
 
 Create your own practice modules with **unlimited stages**. Each stage supports:
 
@@ -49,13 +49,13 @@ Create your own practice modules with **unlimited stages**. Each stage supports:
 | **PDF** | Embed practice texts or sadhana manuals |
 | **Counter** | Per-stage lifetime mantra accumulation |
 
-### 📿 Practice Tracking
+###  Practice Tracking
 
 - **Lifetime Counter** — Persistent count across all sessions
 - **Session Spinbox** — Record repetitions for the current session
 - **One-Click Add** — Updates total and logs to journal automatically
 
-### 📓 Integrated Journal
+###  Integrated Journal
 
 - Automatically logs each session with:
   - Date and time
@@ -64,33 +64,33 @@ Create your own practice modules with **unlimited stages**. Each stage supports:
 - Add personal notes and reflections
 - Browse entries by calendar date
 
-### 📅 Tibetan Buddhist Calendar
+###  Tibetan Buddhist Calendar
 
 - Displays Tibetan lunar dates alongside Gregorian calendar
 - Highlights special observance days (*Düchen*)
 - Shows karmic multipliers (e.g., 100 million × on Buddha Days)
 - Pre-loaded with data from 2025–2049
 
-### 🎵 Audio Player
+###  Audio Player
 
 - Built-in media player with play/pause, stop, and progress seeking
 - Volume control
 - Optional repeat mode for continuous mantra playback
 
-### 📖 Reader & Editor
+###  Reader & Editor
 
 - Multi-tab interface for text files, PDFs, and plain-text editing
 - Zoom controls and fit-to-width/page for PDFs
 - Save edited documents to disk
 
-### 🖼️ Image Viewer
+###  Image Viewer
 
 - Fullscreen zoomable image view (press `I` when image is visible)
 - Smooth scaling and panning
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+##  Keyboard Shortcuts
 
 ### Global
 
@@ -125,7 +125,7 @@ Create your own practice modules with **unlimited stages**. Each stage supports:
 
 
 
-## 🏗️ Technical Overview
+##  Technical Overview
 
 | Component | Technology |
 |-----------|------------|
@@ -147,7 +147,7 @@ Create your own practice modules with **unlimited stages**. Each stage supports:
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ### Flatpak (Linux)
 
@@ -166,13 +166,13 @@ make
 ```
 ---
 
-## 📝 License & Copyright
+##  License & Copyright
 
 © 2026 Alamahant. All rights reserved.
 
 ---
 
-## 🙏 Dedication
+##  Dedication
 
 > *By this merit, may I swiftly attain the state of Chenrezig.*
 > *And may every single living being without exception be established in that very same level.*
